@@ -1,0 +1,6 @@
+channels:
+  - bioconda
+  - conda-forge
+show_channel_urls: true
+changeps1: false
+solver: libmamba
