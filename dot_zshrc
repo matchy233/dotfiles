@@ -1,0 +1,135 @@
+# Set up the prompt
+
+#autoload -Uz promptinit
+#promptinit
+#prompt adam1
+
+setopt histignorealldups sharehistory HIST_IGNORE_SPACE HIST_REDUCE_BLANKS EXTENDED_HISTORY
+
+# Use emacs keybindings even if our EDITOR is set to vi
+bindkey -e
+
+# Keep history within the shell and save it to ~/.zsh_history:
+HISTSIZE=50000
+SAVEHIST=50000
+HISTFILE=~/.zsh_history
+
+# Use modern completion system
+# autoload -Uz compinit
+# compinit
+
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+eval "$(dircolors -b)"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+### For fixing home & end in zsh
+bindkey  "^[[1~"   beginning-of-line
+bindkey  "^[[4~"   end-of-line
+bindkey  "^[[1;5C"  forward-word
+bindkey  "^[[1;5D"  backward-word
+
+export STARSHIP_CONFIG=~/.config/starship.toml
+eval "$(starship init zsh)"
+
+###
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+###
+
+zinit ice wait lucid
+zinit light zdharma-continuum/history-search-multi-word
+
+zinit ice wait lucid atload"_zsh_autosuggest_start"
+zinit light zsh-users/zsh-autosuggestions
+
+zinit ice wait lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+### custom commands
+
+alias ls='ls --color=auto'
+alias ll='ls -lah --color=auto'
+alias la='ls -a --color=auto'
+
+# AI related
+alias ccusage='pnpm dlx ccusage'
+alias codexusage='pnpm dlx @ccusage/codex@latest'
+
+alias cc='claude'
+alias cc-deepseek='claude --settings ~/.agents/cc-deepseek.settings.json'
+alias deepseek='claude --settings ~/.agents/cc-deepseek.settings.json'
+
+alias ccconfig='code ~/.claude'
+alias codexconfig='code ~/.codex'
+alias aiconfig='code ~/.agents'
+
+# List the directory contents
+function cd {
+        builtin cd "$@" || return
+        local count=$(ls | wc -l)
+        if (( count <= 50 )); then
+                ls -F --color=auto
+        else
+                echo "There are $count entries in $(pwd)"
+        fi
+}
+
+###
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if [ -d "/mnt/c/Program Files/Sublime Text" ]; then
+    export PATH="/mnt/c/Program Files/Sublime Text:$PATH"
+fi
+
+if [ -d "/mnt/c/Program Files (x86)/Sublime Text" ]; then
+    export PATH="/mnt/c/Program Files (x86)/Sublime Text:$PATH"
+fi
+alias subl="subl.exe"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$("$HOME/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/miniforge3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba shell init' !!
+export MAMBA_EXE="$HOME/miniforge3/bin/mamba";
+export MAMBA_ROOT_PREFIX="$HOME/miniforge3";
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    alias mamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
+export NVS_HOME="$HOME/.nvs"
+[ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
