@@ -1,17 +1,21 @@
 ### ENV VARS ###
+# Google Cloud
+$env:GOOGLE_APPLICATION_CREDENTIALS = "$HOME\.config\google-cloud\vertexai-service-account.json"
+$env:GOOGLE_CLOUD_PROJECT = "<your-google-cloud-project-id>"
+
 $env:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
-$env:Path += ";$HOME\.local\bin" 
+$env:Path += ";$HOME\.local\bin"
 
 ### GLOBAL SETTINGS ###
 # Suppress multiline warning
-$ErrorView='CategoryView'
+$ErrorView = 'CategoryView'
 
 
 ### CUSTOM FUNCTIONS ###
-#  
-function fn_showconfig {
-    python $HOME\.local\bin\sshconfig.py $args
-}
+
+# function fn_showconfig {
+#     python $HOME\.local\bin\sshconfig.py $args
+# }
 
 function Test-FullWidth {
     param (
@@ -41,7 +45,8 @@ function Get-Substring {
     for ($i = 0; $i -lt $String.Length; $i++) {
         if (Test-FullWidth $String[$i]) {
             $curr += 2
-        } else {
+        }
+        else {
             $curr++
         }
 
@@ -54,7 +59,8 @@ function Get-Substring {
     for ($i = $startIndex; $i -lt $String.Length; $i++) {
         if (Test-FullWidth $String[$i]) {
             $curr += 2
-        } else {
+        }
+        else {
             $curr++
         }
 
@@ -104,28 +110,32 @@ function ls_custom {
             elseif ($size -lt 1mb) {
                 if ($size / 1kb -lt 10) {
                     return [string]::Format("{0:0.0}K", [math]::Round($size / 1kb, 2))
-                } else {
+                }
+                else {
                     return [string]::Format("{0:0}K", [math]::Round($size / 1kb, 2))
                 }
             }
             elseif ($size -lt 1gb) {
                 if ($size / 1mb -lt 10) {
                     return [string]::Format("{0:0.0}M", [math]::Round($size / 1mb, 2))
-                } else {
+                }
+                else {
                     return [string]::Format("{0:0}M", [math]::Round($size / 1mb, 2))
                 }
             }
             elseif ($size -lt 1tb) {
                 if ($size / 1gb -lt 10) {
                     return [string]::Format("{0:0.0}G", [math]::Round($size / 1gb, 2))
-                } else {
+                }
+                else {
                     return [string]::Format("{0:0}G", [math]::Round($size / 1gb, 2))
                 }
             }
             else {
                 if ($size / 1tb -lt 10) {
                     return [string]::Format("{0:0.0}T", [math]::Round($size / 1tb, 2))
-                } else {
+                }
+                else {
                     return [string]::Format("{0:0}T", [math]::Round($size / 1tb, 2))
                 }
             }
@@ -195,7 +205,8 @@ function ls_custom {
                 if (Test-FullWidth $out[$j]) {
                     $outLen += 2
                     $shrinkVal++
-                } else {
+                }
+                else {
                     $outLen++
                 }
             }
@@ -267,16 +278,20 @@ Function cd_custom {
                 else {
                     Write-Output "There are a total of $numObj entries in $((Get-Location).path)"
                 }
-            } catch {
+            }
+            catch {
                 $_
             }
 
-        } elseif (test-path -Path $Args -PathType Leaf) {
+        }
+        elseif (test-path -Path $Args -PathType Leaf) {
             Write-Host -ForegroundColor Red "ERROR: Destination directory is a file"
-        } else {
+        }
+        else {
             Write-Host -ForegroundColor Red "ERROR: Destination directory does not exist"
         }
-    } else {
+    }
+    else {
         set-location $(get-location)
     }
 }
@@ -308,23 +323,42 @@ Function Remove-DupDownloads {
 }
 
 ### Starship
+function unzip_custom {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$Path,
+        [Parameter(Mandatory = $false, Position = 1)]
+        [Alias("o")]
+        [string]$DestinationPath = "."
+    )
+
+    if (-not (Test-Path $Path)) {
+        Write-Error "File not found: $Path"
+        return
+    }
+
+    if (-not (Test-Path $DestinationPath)) {
+        New-Item -ItemType Directory -Force -Path $DestinationPath | Out-Null
+    }
+
+    Expand-Archive -Path $Path -DestinationPath $DestinationPath -Force
+}
+
 function Invoke-Starship-PreCommand {
-  $loc = $executionContext.SessionState.Path.CurrentLocation;
-  $prompt = "$([char]27)]9;12$([char]7)"
-  if ($loc.Provider.Name -eq "FileSystem")
-  {
-    $prompt += "$([char]27)]9;9;`"$($loc.ProviderPath)`"$([char]27)\"
-  }
-  $host.ui.Write($prompt)
+    $loc = $executionContext.SessionState.Path.CurrentLocation;
+    $prompt = "$([char]27)]9;12$([char]7)"
+    if ($loc.Provider.Name -eq "FileSystem") {
+        $prompt += "$([char]27)]9;9;`"$($loc.ProviderPath)`"$([char]27)\"
+    }
+    $host.ui.Write($prompt)
 }
 
 Invoke-Expression (&starship init powershell)
-Get-ChildItem "$PROFILE\..\Completions\" | ForEach-Object {
-    . $_.FullName
-}
+# Get-ChildItem "$PROFILE\..\Completions\" | ForEach-Object {
+#     . $_.FullName
+# }
 
 ###
-
 set-psreadlineoption -colors @{ "InlinePrediction" = "#838383" }
 
 ### Alias
@@ -333,3 +367,5 @@ set-alias -Name rmdup -Value Remove-DupDownloads -Option AllScope
 set-alias -Name sshconfig -Value fn_showconfig
 set-alias -Name cd -Value cd_custom -Option AllScope
 set-alias -Name ls -Value ls_custom -Option AllScope
+set-alias -Name which -Value get-command
+set-alias -Name unzip -Value unzip_custom -Option AllScope
