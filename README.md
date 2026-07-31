@@ -84,6 +84,15 @@ variables, and functions can override shared defaults. Before the first apply
 on an existing device, move device-only settings out of `.zshrc` or a
 PowerShell profile and into the corresponding local file.
 
+Google Cloud settings are device-local. Configure them in
+`~/.config/powershell/local-profile.ps1`, for example:
+
+```powershell
+$env:GOOGLE_APPLICATION_CREDENTIALS = `
+    "$HOME\.config\google-cloud\vertexai-service-account.json"
+$env:GOOGLE_CLOUD_PROJECT = "<your-google-cloud-project-id>"
+```
+
 On Windows, both profile entrypoints load the same managed fragment:
 
 ```text

@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import re
 import tomllib
 import unittest
 
@@ -44,6 +45,22 @@ class SourceConfigTest(unittest.TestCase):
             shared_index = content.index("shared-profile.ps1")
             local_index = content.index("local-profile.ps1")
             self.assertLess(shared_index, local_index, profile)
+
+    def test_shared_source_has_no_absolute_linux_home_paths(self) -> None:
+        absolute_home = re.compile(r"/home/[A-Za-z0-9._-]+")
+        for path in (ROOT / "home").rglob("*"):
+            if not path.is_file():
+                continue
+            content = path.read_text(encoding="utf-8")
+            self.assertIsNone(absolute_home.search(content), path)
+
+    def test_google_cloud_environment_is_device_local(self) -> None:
+        shared_profile = (
+            ROOT / "home/dot_config/powershell/shared-profile.ps1"
+        ).read_text(encoding="utf-8")
+
+        self.assertNotIn("GOOGLE_CLOUD_PROJECT", shared_profile)
+        self.assertNotIn("GOOGLE_APPLICATION_CREDENTIALS", shared_profile)
 
 
 if __name__ == "__main__":

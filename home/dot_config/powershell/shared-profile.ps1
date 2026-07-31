@@ -1,8 +1,4 @@
 ### ENV VARS ###
-# Google Cloud
-$env:GOOGLE_APPLICATION_CREDENTIALS = "$HOME\.config\google-cloud\vertexai-service-account.json"
-$env:GOOGLE_CLOUD_PROJECT = "<your-google-cloud-project-id>"
-
 $env:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
 $env:Path += ";$HOME\.local\bin"
 
