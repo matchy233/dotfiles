@@ -28,6 +28,19 @@ chezmoi diff
 chezmoi apply --dry-run --verbose
 ```
 
+On Windows, run the repository bootstrap from PowerShell after `chezmoi init`:
+
+```powershell
+$sourceDir = chezmoi source-path
+& (Join-Path (Split-Path -Parent $sourceDir) "setup.ps1")
+```
+
+The script creates and removes a real symbolic link before previewing changes.
+If that fails, enable Windows Developer Mode and rerun it. When a legacy
+`~/.agents` Git checkout exists, the script shows `git status`, runs `git fsck`,
+and asks before renaming it within `$HOME`. It never recursively moves the
+checkout.
+
 Review the diff before applying. A normal apply also runs the skill installer,
 which downloads the versions declared in `~/.agents/skills-lock.json`:
 
@@ -51,6 +64,10 @@ chmod 600 ~/.agents/claude/cc-deepseek.settings.json
 ```
 
 Do not add the private file to this repository.
+
+The Windows bootstrap restores this file from a legacy agents backup when
+available. Otherwise it copies the example and warns when the token is absent
+or still set to `<your-deepseek-api-key>`; it never prints the token.
 
 ## Local Shell Overrides
 
