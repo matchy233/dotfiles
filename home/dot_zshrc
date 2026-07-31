@@ -72,8 +72,8 @@ alias ccusage='pnpm dlx ccusage'
 alias codexusage='pnpm dlx @ccusage/codex@latest'
 
 alias cc='claude'
-alias cc-deepseek='claude --settings ~/.agents/cc-deepseek.settings.json'
-alias deepseek='claude --settings ~/.agents/cc-deepseek.settings.json'
+alias cc-deepseek='claude --settings ~/.agents/claude/cc-deepseek.settings.json'
+alias deepseek='claude --settings ~/.agents/claude/cc-deepseek.settings.json'
 
 alias ccconfig='code ~/.claude'
 alias codexconfig='code ~/.codex'
@@ -93,6 +93,8 @@ function cd {
 ###
 
 export PATH="$HOME/.local/bin:$PATH"
+
+. "$HOME/.cargo/env"
 
 if [ -d "/mnt/c/Program Files/Sublime Text" ]; then
     export PATH="/mnt/c/Program Files/Sublime Text:$PATH"
@@ -133,3 +135,7 @@ unset __mamba_setup
 # <<< mamba initialize <<<
 export NVS_HOME="$HOME/.nvs"
 [ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
