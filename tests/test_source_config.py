@@ -62,6 +62,16 @@ class SourceConfigTest(unittest.TestCase):
         self.assertNotIn("GOOGLE_CLOUD_PROJECT", shared_profile)
         self.assertNotIn("GOOGLE_APPLICATION_CREDENTIALS", shared_profile)
 
+    def test_local_only_source_paths_are_gitignored(self) -> None:
+        gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
+
+        for path in [
+            "home/dot_zshrc.local",
+            "home/dot_config/powershell/local-profile.ps1",
+            "home/dot_agents/claude/cc-deepseek.settings.json",
+        ]:
+            self.assertIn(path, gitignore)
+
 
 if __name__ == "__main__":
     unittest.main()

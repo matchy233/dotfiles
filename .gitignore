@@ -1,2 +1,5 @@
 worklogs/
 __pycache__/
+home/dot_zshrc.local
+home/dot_config/powershell/local-profile.ps1
+home/dot_agents/claude/cc-deepseek.settings.json
