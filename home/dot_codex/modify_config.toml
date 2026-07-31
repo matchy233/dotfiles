@@ -1,0 +1,7 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- $current := dict -}}
+{{- if ne (.chezmoi.stdin | trim) "" -}}
+{{-   $current = .chezmoi.stdin | fromToml -}}
+{{- end -}}
+{{- $shared := include "dot_agents/codex/config.shared.toml" | fromToml -}}
+{{ mergeOverwrite $current $shared | toToml }}
