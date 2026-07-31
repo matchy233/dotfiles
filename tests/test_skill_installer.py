@@ -1,6 +1,8 @@
 import importlib.util
 import json
 from pathlib import Path
+import shutil
+import sys
 import tempfile
 from types import ModuleType
 from typing import Any, List
@@ -19,7 +21,12 @@ def load_installer() -> ModuleType:
     if spec is None or spec.loader is None:
         raise AssertionError(f"cannot load installer: {INSTALLER_PATH}")
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    previous = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.dont_write_bytecode = previous
     return module
 
 
@@ -124,6 +131,14 @@ class SkillInstallerTest(unittest.TestCase):
                 )
 
             self.assertEqual(existing.read_text(encoding="utf-8"), "old")
+
+    def test_loading_installer_does_not_pollute_chezmoi_source(self) -> None:
+        cache = INSTALLER_PATH.parent / "__pycache__"
+        shutil.rmtree(cache, ignore_errors=True)
+
+        load_installer()
+
+        self.assertFalse(cache.exists())
 
 
 if __name__ == "__main__":

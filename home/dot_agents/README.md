@@ -1,43 +1,23 @@
-# agents
+# Shared agent configuration
 
-Dotfiles and shared configuration for AI coding agents (Claude Code, Codex, etc.).
+This directory is generated from
+[`matchy233/dotfiles`](https://github.com/matchy233/dotfiles) by chezmoi. It is
+not a separate Git checkout.
 
-## Setup
+- `AGENTS.md` contains instructions shared by compatible agent CLIs.
+- `codex/config.shared.toml` contains only cross-device Codex defaults.
+- `codex/agents/` contains custom Codex agent profiles.
+- `claude/` contains shared Claude Code settings and a credential-free example.
+- `skills/` contains custom and installed skills shared by multiple CLIs.
+- `skills-lock.json` declares reproducible third-party skill versions.
 
-```bash
-git clone git@github.com:matchy233/agents.git ~/.agents
-cd ~/.agents
+Edit the chezmoi source rather than files in this generated directory:
 
-# Symlink configs into ~/.claude and ~/.codex
-python init-config.py
-
-# Install skills from lock file
-python install-skills.py
-# or: npx skills experimental_install
-
-# Copy and fill in API keys
-cp claude/cc-deepseek.settings.example.json claude/cc-deepseek.settings.json
+```sh
+chezmoi cd
+chezmoi diff
 ```
 
-On Windows, enable Developer Mode for symlinks or run as admin.
-
-## Structure
-
-```
-.
-├── AGENTS.md              # Shared agent instructions (→ ~/.claude/CLAUDE.md, ~/.codex/AGENTS.md)
-├── claude/
-│   ├── settings.json      # Claude Code global settings (→ ~/.claude/settings.json)
-│   └── cc-deepseek.settings.example.json
-├── codex/
-│   └── config.toml        # Codex CLI config (→ ~/.codex/config.toml)
-├── my-skills/             # Custom skills, linked into ~/.claude/skills/
-├── skills/                # Skills installed via npx skills (gitignored)
-├── .skill-lock.json       # Skill lock file for reproducible installs
-├── init-config.py         # Symlink setup script
-└── install-skills.py      # Reinstall skills from lock file
-```
-
-## Adding a custom skill
-
-Create a directory under `my-skills/` with a `SKILL.md`, then re-run `python init-config.py` to link it.
+Codex project trust remains device-local in `~/.codex/config.toml`. Private
+Claude credentials belong in `~/.agents/claude/cc-deepseek.settings.json`,
+which chezmoi does not manage.
