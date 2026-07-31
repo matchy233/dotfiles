@@ -1,0 +1,4 @@
+name = "explorer"
+description = "Explorer subagent for reading and analysis tasks."
+developer_instructions = "Inspect code and docs without making changes unless explicitly asked."
+model = "gpt-5.4-mini"

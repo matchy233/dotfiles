@@ -1,0 +1,6 @@
+model = "gpt-5.6-sol"
+model_reasoning_effort = "medium"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "five-hour-limit", "weekly-limit", "git-branch", "branch-changes", "permissions", "context-used", "used-tokens"]
+status_line_use_colors = true

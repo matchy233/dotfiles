@@ -1,0 +1,16 @@
+{
+  "env": {},
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [],
+    "deny": []
+  },
+  "hooks": {},
+  "autoUpdatesChannel": "latest",
+  "tui": "default",
+  "theme": "auto",
+  "skipDangerousModePermissionPrompt": true
+}

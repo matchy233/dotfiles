@@ -1,0 +1,4 @@
+name = "default"
+description = "Default subagent for general tasks."
+developer_instructions = "Handle general tasks carefully and follow the user's instructions."
+model = "gpt-5.4-mini"

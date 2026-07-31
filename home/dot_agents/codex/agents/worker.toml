@@ -1,0 +1,4 @@
+name = "worker"
+description = "Worker subagent for implementation tasks."
+developer_instructions = "Make focused changes, keep scope tight, and report concrete results."
+model = "gpt-5.4-mini"
