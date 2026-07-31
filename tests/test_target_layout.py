@@ -73,14 +73,19 @@ class TargetLayoutTest(unittest.TestCase):
             for relative in ["README.md", "setup.sh", "setup.ps1"]:
                 self.assertFalse((home / relative).exists(), relative)
 
-            windows_profile = (
+            windows_profiles = [
                 home
-                / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
-            )
+                / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1",
+                home / "Documents/PowerShell/Microsoft.PowerShell_profile.ps1",
+            ]
+            shared_profile = home / ".config/powershell/shared-profile.ps1"
             if renders_windows_documents():
-                self.assertTrue(windows_profile.is_file(), windows_profile)
+                self.assertTrue(shared_profile.is_file(), shared_profile)
+                for profile in windows_profiles:
+                    self.assertTrue(profile.is_file(), profile)
             else:
                 self.assertFalse((home / "Documents").exists(), "Documents")
+                self.assertFalse(shared_profile.exists(), shared_profile)
 
     def test_second_apply_preserves_codex_projects(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

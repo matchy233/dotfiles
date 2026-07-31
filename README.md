@@ -7,11 +7,13 @@ Claude Code and Codex to the shared files they need.
 ## What Is Managed
 
 - Shell files: `~/.zshrc`, `~/.condarc`, and `~/.dircolors`.
+- Optional device-local shell overrides that remain outside Git.
 - Shared agent instructions: `~/.agents/AGENTS.md`.
 - Shared and custom skills: `~/.agents/skills/`.
 - Claude Code settings and links below `~/.claude/`.
 - Codex shared defaults, custom agent profiles, and links below `~/.codex/`.
 - A PowerShell profile on Windows only.
+- Shared PowerShell settings loaded by Windows PowerShell 5.1 and PowerShell 7.
 
 Repository files such as this README and the setup scripts live outside the
 `home/` source root, so chezmoi does not copy them into `$HOME`.
@@ -49,6 +51,31 @@ chmod 600 ~/.agents/claude/cc-deepseek.settings.json
 ```
 
 Do not add the private file to this repository.
+
+## Local Shell Overrides
+
+Chezmoi replaces the synchronized shell entrypoints on apply. Put settings
+that belong only to one device in files that are not managed by chezmoi:
+
+```text
+~/.zshrc.local
+~/.config/powershell/local-profile.ps1
+```
+
+The managed entrypoints load these files last, so local aliases, environment
+variables, and functions can override shared defaults. Before the first apply
+on an existing device, move device-only settings out of `.zshrc` or a
+PowerShell profile and into the corresponding local file.
+
+On Windows, both profile entrypoints load the same managed fragment:
+
+```text
+~/.config/powershell/shared-profile.ps1
+```
+
+`Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1` targets Windows
+PowerShell 5.1. `Documents/PowerShell/Microsoft.PowerShell_profile.ps1` targets
+PowerShell 7.
 
 ## Daily Workflow
 

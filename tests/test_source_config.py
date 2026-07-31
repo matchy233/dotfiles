@@ -23,6 +23,28 @@ class SourceConfigTest(unittest.TestCase):
             config = tomllib.load(file)
         self.assertNotIn("projects", config)
 
+    def test_shell_entrypoints_load_local_overrides_last(self) -> None:
+        zshrc = (ROOT / "home/dot_zshrc").read_text(encoding="utf-8")
+        self.assertIn("$HOME/.zshrc.local", zshrc)
+        self.assertTrue(zshrc.rstrip().endswith('source "$HOME/.zshrc.local"\nfi'))
+
+        shared = ROOT / "home/dot_config/powershell/shared-profile.ps1"
+        self.assertTrue(shared.is_file(), shared)
+
+        profiles = [
+            ROOT
+            / "home/readonly_Documents/WindowsPowerShell"
+            / "empty_Microsoft.PowerShell_profile.ps1",
+            ROOT
+            / "home/readonly_Documents/PowerShell"
+            / "empty_Microsoft.PowerShell_profile.ps1",
+        ]
+        for profile in profiles:
+            content = profile.read_text(encoding="utf-8")
+            shared_index = content.index("shared-profile.ps1")
+            local_index = content.index("local-profile.ps1")
+            self.assertLess(shared_index, local_index, profile)
+
 
 if __name__ == "__main__":
     unittest.main()
