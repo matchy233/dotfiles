@@ -4,10 +4,19 @@ import tempfile
 import tomllib
 import unittest
 
+from tests.platform_support import (
+    renders_windows_documents,
+    WINDOWS_WITHOUT_SYMBOLIC_LINKS,
+)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
+@unittest.skipIf(
+    WINDOWS_WITHOUT_SYMBOLIC_LINKS,
+    "Windows symbolic-link privilege is unavailable",
+)
 class TargetLayoutTest(unittest.TestCase):
     def apply(self, home: Path) -> None:
         subprocess.run(
@@ -56,13 +65,22 @@ class TargetLayoutTest(unittest.TestCase):
                 self.assertTrue(link.is_symlink(), link_name)
                 self.assertEqual(link.resolve(), (home / target_name).resolve())
 
-    def test_repository_only_and_windows_files_are_absent(self) -> None:
+    def test_repository_only_files_are_absent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
             self.apply(home)
 
-            for relative in ["README.md", "setup.sh", "setup.ps1", "Documents"]:
+            for relative in ["README.md", "setup.sh", "setup.ps1"]:
                 self.assertFalse((home / relative).exists(), relative)
+
+            windows_profile = (
+                home
+                / "Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1"
+            )
+            if renders_windows_documents():
+                self.assertTrue(windows_profile.is_file(), windows_profile)
+            else:
+                self.assertFalse((home / "Documents").exists(), "Documents")
 
     def test_second_apply_preserves_codex_projects(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
