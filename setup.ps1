@@ -1,8 +1,6 @@
 [CmdletBinding()]
 param()
 
-$ErrorActionPreference = "Stop"
-
 function Test-CommandAvailable {
     param(
         [Parameter(Mandatory = $true)]
@@ -18,11 +16,23 @@ function Test-SymbolicLinkCapability {
         ("dotfiles-symlink-" + [guid]::NewGuid().ToString("N"))
 
     try {
-        New-Item -ItemType Directory -Path $probeRoot | Out-Null
+        New-Item `
+            -ItemType Directory `
+            -Path $probeRoot `
+            -ErrorAction Stop |
+            Out-Null
         $targetPath = Join-Path $probeRoot "target.txt"
         $linkPath = Join-Path $probeRoot "link.txt"
-        Set-Content -LiteralPath $targetPath -Value "probe" -NoNewline
-        New-Item -ItemType SymbolicLink -Path $linkPath -Target $targetPath |
+        Set-Content `
+            -LiteralPath $targetPath `
+            -Value "probe" `
+            -NoNewline `
+            -ErrorAction Stop
+        New-Item `
+            -ItemType SymbolicLink `
+            -Path $linkPath `
+            -Target $targetPath `
+            -ErrorAction Stop |
             Out-Null
         return (Test-Path -LiteralPath $linkPath)
     }
@@ -31,7 +41,11 @@ function Test-SymbolicLinkCapability {
     }
     finally {
         if (Test-Path -LiteralPath $probeRoot) {
-            Remove-Item -LiteralPath $probeRoot -Recurse -Force
+            Remove-Item `
+                -LiteralPath $probeRoot `
+                -Recurse `
+                -Force `
+                -ErrorAction SilentlyContinue
         }
     }
 }
@@ -53,13 +67,27 @@ function Invoke-CheckedCommand {
 function Backup-LegacyAgentsRepository {
     $agentsPath = Join-Path $HOME ".agents"
     $gitPath = Join-Path $agentsPath ".git"
+    $backupPath = Join-Path $HOME ".agents.backup-before-chezmoi"
+    $backupGitPath = Join-Path $backupPath ".git"
+
     if (-not (Test-Path -LiteralPath $gitPath)) {
-        return $null
+        if (-not (Test-Path -LiteralPath $backupPath)) {
+            return $null
+        }
+        if (-not (Test-Path -LiteralPath $backupGitPath)) {
+            throw "Existing agents backup does not contain Git metadata: $backupPath"
+        }
+
+        Write-Host "Reusing existing agents backup: $backupPath"
+        git -C $backupPath fsck --no-progress
+        if ($LASTEXITCODE -ne 0) {
+            throw "Existing agents backup failed git fsck"
+        }
+        return $backupPath
     }
 
-    $backupPath = Join-Path $HOME ".agents.backup-before-chezmoi"
     if (Test-Path -LiteralPath $backupPath) {
-        throw "Backup already exists: $backupPath"
+        throw "Backup already exists while the legacy checkout is present: $backupPath"
     }
 
     Write-Host "Legacy agents Git checkout detected: $agentsPath"
@@ -84,7 +112,6 @@ function Backup-LegacyAgentsRepository {
         -LiteralPath $agentsPath `
         -NewName ".agents.backup-before-chezmoi"
 
-    $backupGitPath = Join-Path $backupPath ".git"
     if (-not (Test-Path -LiteralPath $backupGitPath)) {
         throw "Renamed backup does not contain Git metadata: $backupPath"
     }
@@ -157,6 +184,8 @@ function Initialize-PrivateDeepSeekSettings {
 }
 
 function Invoke-DotfilesSetup {
+    $ErrorActionPreference = "Stop"
+
     foreach ($command in @("git", "chezmoi", "npx")) {
         if (-not (Test-CommandAvailable -Name $command)) {
             throw "Required command is unavailable: $command"

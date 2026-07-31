@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import unittest
@@ -21,7 +22,10 @@ class WindowsSetupTest(unittest.TestCase):
         ]:
             self.assertIn(f"function {function}", content)
 
-        self.assertIn("New-Item -ItemType SymbolicLink", content)
+        self.assertRegex(
+            content,
+            re.compile(r"New-Item\s+`?\s*-ItemType SymbolicLink", re.MULTILINE),
+        )
         self.assertIn("Rename-Item", content)
         self.assertNotIn("Move-Item", content)
         self.assertIn('git -C $agentsPath status --short --branch', content)
@@ -31,6 +35,19 @@ class WindowsSetupTest(unittest.TestCase):
         self.assertIn("ANTHROPIC_AUTH_TOKEN", content)
         self.assertIn("<your-deepseek-api-key>", content)
         self.assertNotIn("Write-Output $token", content)
+
+    def test_dot_sourcing_does_not_change_the_caller_error_preference(self) -> None:
+        content = SETUP.read_text(encoding="utf-8")
+        setup_function = content.index("function Invoke-DotfilesSetup")
+        error_preference = content.index('$ErrorActionPreference = "Stop"')
+
+        self.assertGreater(error_preference, setup_function)
+
+    def test_existing_agents_backup_can_be_reused_after_failed_apply(self) -> None:
+        content = SETUP.read_text(encoding="utf-8")
+
+        self.assertIn("Reusing existing agents backup", content)
+        self.assertIn("return $backupPath", content)
 
     def test_setup_parses_when_native_powershell_is_available(self) -> None:
         powershell = shutil.which("pwsh") or shutil.which("powershell")

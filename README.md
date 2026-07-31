@@ -12,8 +12,7 @@ Claude Code and Codex to the shared files they need.
 - Shared and custom skills: `~/.agents/skills/`.
 - Claude Code settings and links below `~/.claude/`.
 - Codex shared defaults, custom agent profiles, and links below `~/.codex/`.
-- A PowerShell profile on Windows only.
-- Shared PowerShell settings loaded by Windows PowerShell 5.1 and PowerShell 7.
+- Windows PowerShell 5.1 and PowerShell 7 profiles that load shared settings.
 
 Repository files such as this README and the setup scripts live outside the
 `home/` source root, so chezmoi does not copy them into `$HOME`.
@@ -39,7 +38,8 @@ The script creates and removes a real symbolic link before previewing changes.
 If that fails, enable Windows Developer Mode and rerun it. When a legacy
 `~/.agents` Git checkout exists, the script shows `git status`, runs `git fsck`,
 and asks before renaming it within `$HOME`. It never recursively moves the
-checkout.
+checkout. If apply fails after the rename, rerunning the script validates and
+reuses the existing backup.
 
 Review the diff before applying. A normal apply also runs the skill installer,
 which downloads the versions declared in `~/.agents/skills-lock.json`:
