@@ -1,4 +1,4 @@
 {{- if ne .chezmoi.os "windows" }}
 Documents
-.config/powershell
+.config
 {{- end }}

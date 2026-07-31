@@ -85,7 +85,7 @@ class TargetLayoutTest(unittest.TestCase):
                     self.assertTrue(profile.is_file(), profile)
             else:
                 self.assertFalse((home / "Documents").exists(), "Documents")
-                self.assertFalse(shared_profile.exists(), shared_profile)
+                self.assertFalse((home / ".config").exists(), ".config")
 
     def test_second_apply_preserves_codex_projects(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
