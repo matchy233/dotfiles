@@ -1,4 +1,5 @@
 from pathlib import Path
+import stat
 import subprocess
 import tempfile
 import tomllib
@@ -49,6 +50,7 @@ class CodexConfigMergeTest(unittest.TestCase):
                 "trusted",
             )
             self.assertTrue(config["tui"]["status_line_use_colors"])
+            self.assertEqual(stat.S_IMODE(config_path.stat().st_mode), 0o600)
 
 
 if __name__ == "__main__":
