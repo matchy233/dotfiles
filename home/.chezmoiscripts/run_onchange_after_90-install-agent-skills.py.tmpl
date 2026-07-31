@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+# skills-lock-sha256: {{ include "dot_agents/skills-lock.json" | sha256sum }}
+
+from pathlib import Path
+import runpy
+
+
+runpy.run_path(
+    str(Path({{ .chezmoi.homeDir | quote }}) / ".agents/install-skills.py"),
+    run_name="__main__",
+)
