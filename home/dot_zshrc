@@ -52,21 +52,22 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 ###
 
-zinit ice wait lucid atload'HSMW_HIGHLIGHT_STYLES[path]="fg=74"'
+zinit ice wait lucid
 zinit light zdharma-continuum/history-search-multi-word
 
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
+zinit ice lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
+zinit light zdharma-continuum/fast-syntax-highlighting
+
+zinit wait
 typeset -gA FAST_HIGHLIGHT_STYLES HSMW_HIGHLIGHT_STYLES
 FAST_HIGHLIGHT_STYLES[path]="fg=74"
 FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=74"
 FAST_HIGHLIGHT_STYLES[freepath]="fg=74"
 FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"
 HSMW_HIGHLIGHT_STYLES[path]="fg=74"
-
-zinit ice lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" atload'FAST_HIGHLIGHT_STYLES[path]="fg=74"; FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=74"; FAST_HIGHLIGHT_STYLES[freepath]="fg=74"; FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"'
-zinit light zdharma-continuum/fast-syntax-highlighting
 
 ### custom commands
 
