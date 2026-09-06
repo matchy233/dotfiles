@@ -22,7 +22,7 @@ zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
-eval "$(dircolors -b)"
+eval "$(dircolors -b ~/.dircolors)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -58,12 +58,8 @@ zinit light zdharma-continuum/history-search-multi-word
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
-zinit ice wait lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
+zinit ice wait lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" atload'FAST_HIGHLIGHT_STYLES[path]="fg=#3a96dd"; FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=#3a96dd"'
 zinit light zdharma-continuum/fast-syntax-highlighting
-
-# Keep command-line path highlighting consistent with the Starship directory color.
-FAST_HIGHLIGHT_STYLES[path]="fg=#3a96dd"
-FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=#3a96dd"
 
 ### custom commands
 
