@@ -58,20 +58,15 @@ zinit light zdharma-continuum/history-search-multi-word
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
+typeset -gA FAST_HIGHLIGHT_STYLES HSMW_HIGHLIGHT_STYLES
+FAST_HIGHLIGHT_STYLES[path]="fg=74"
+FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=74"
+FAST_HIGHLIGHT_STYLES[freepath]="fg=74"
+FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"
+HSMW_HIGHLIGHT_STYLES[path]="fg=74"
+
 zinit ice lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
-
-function _matchy_fsh_path_colors() {
-    typeset -gA FAST_HIGHLIGHT_STYLES HSMW_HIGHLIGHT_STYLES
-    FAST_HIGHLIGHT_STYLES[path]="fg=74"
-    FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=74"
-    FAST_HIGHLIGHT_STYLES[freepath]="fg=74"
-    FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"
-    HSMW_HIGHLIGHT_STYLES[path]="fg=74"
-    HSMW_HIGHLIGHT_STYLES[path_prefix]="fg=74"
-}
-autoload -Uz add-zsh-hook
-add-zsh-hook precmd _matchy_fsh_path_colors
 
 ### custom commands
 
