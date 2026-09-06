@@ -61,6 +61,10 @@ zinit light zsh-users/zsh-autosuggestions
 zinit ice wait lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
 
+# Keep command-line path highlighting consistent with the Starship directory color.
+FAST_HIGHLIGHT_STYLES[path]="fg=#3a96dd"
+FAST_HIGHLIGHT_STYLES[path-to-dir]="fg=#3a96dd"
+
 ### custom commands
 
 alias ls='ls --color=auto'
