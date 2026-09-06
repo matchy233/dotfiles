@@ -2,4 +2,6 @@
 Documents
 .config/*
 !.config/starship.toml
+!.config/fsh
+!.config/fsh/**
 {{- end }}
