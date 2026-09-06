@@ -65,6 +65,18 @@ FAST_HIGHLIGHT_STYLES[freepath]="fg=74"
 FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"
 HSMW_HIGHLIGHT_STYLES[path]="fg=74"
 
+function _matchy_fsh_path_colors() {
+    typeset -gA FAST_HIGHLIGHT_STYLES HSMW_HIGHLIGHT_STYLES
+    FAST_HIGHLIGHT_STYLES[path]="fg=74"
+    FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=74"
+    FAST_HIGHLIGHT_STYLES[freepath]="fg=74"
+    FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"
+    HSMW_HIGHLIGHT_STYLES[path]="fg=74"
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook zle-line-pre-redraw _matchy_fsh_path_colors
+
 zinit ice lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
 
