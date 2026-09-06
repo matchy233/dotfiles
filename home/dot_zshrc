@@ -66,6 +66,8 @@ function _matchy_fsh_path_colors() {
     FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=74"
     FAST_HIGHLIGHT_STYLES[freepath]="fg=74"
     FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=74"
+    HSMW_HIGHLIGHT_STYLES[path]="fg=74"
+    HSMW_HIGHLIGHT_STYLES[path_prefix]="fg=74"
 }
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _matchy_fsh_path_colors
