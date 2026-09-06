@@ -59,8 +59,16 @@ zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit light zsh-users/zsh-autosuggestions
 
 zinit ice lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
-zinit ice lucid atload'FAST_HIGHLIGHT_STYLES[path]="fg=#3a96dd"; FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=#3a96dd"; FAST_HIGHLIGHT_STYLES[freepath]="fg=#3a96dd"; FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=#3a96dd"'
 zinit light zdharma-continuum/fast-syntax-highlighting
+
+function _matchy_fsh_path_colors() {
+    FAST_HIGHLIGHT_STYLES[path]="fg=#3a96dd"
+    FAST_HIGHLIGHT_STYLES["path-to-dir"]="fg=#3a96dd"
+    FAST_HIGHLIGHT_STYLES[freepath]="fg=#3a96dd"
+    FAST_HIGHLIGHT_STYLES["freepath-to-dir"]="fg=#3a96dd"
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _matchy_fsh_path_colors
 
 ### custom commands
 
