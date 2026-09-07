@@ -143,6 +143,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# Shared WSL-specific settings are managed separately.
+if [[ -r "$HOME/.zshrc.wsl" ]]; then
+    source "$HOME/.zshrc.wsl"
+fi
+
 # Device-local settings load last and can override shared defaults.
 if [[ -r "$HOME/.zshrc.local" ]]; then
     source "$HOME/.zshrc.local"

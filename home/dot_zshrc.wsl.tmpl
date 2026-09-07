@@ -1,0 +1,8 @@
+{{- if eq .chezmoi.os "linux" }}
+{{- if contains "microsoft" (.chezmoi.kernel.osrelease | lower) }}
+
+# Shared WSL-specific settings
+export WIN_FONT_DIR="/mnt/c/Windows/Fonts"
+
+{{- end }}
+{{- end }}
