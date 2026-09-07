@@ -4,4 +4,6 @@ Documents
 !.config/starship.toml
 !.config/fsh
 !.config/fsh/**
+!.config/fontconfig
+!.config/fontconfig/**
 {{- end }}

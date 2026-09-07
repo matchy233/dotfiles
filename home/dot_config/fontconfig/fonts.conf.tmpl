@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+<fontconfig>
+{{- if eq .chezmoi.os "linux" }}
+{{- if contains "microsoft" (.chezmoi.kernel.osrelease | lower) }}
+  <dir>/mnt/c/Windows/Fonts</dir>
+{{- $userFontDirs := output "sh" "-c" "for dir in /mnt/c/Users/*/AppData/Local/Microsoft/Windows/Fonts; do if [ -d \"$dir\" ]; then printf '%s\\n' \"$dir\"; fi; done" | trim -}}
+{{- if $userFontDirs }}
+{{- range $dir := splitList "\n" $userFontDirs }}
+  <dir>{{ $dir }}</dir>
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+</fontconfig>
