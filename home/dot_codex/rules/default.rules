@@ -16,4 +16,5 @@ prefix_rule(pattern=["git", "worktree"], decision="allow")
 
 prefix_rule(pattern=["chezmoi", "apply"], decision="allow")
 prefix_rule(pattern=["uv", "add"], decision="allow")
+prefix_rule(pattern=["uv", "run"], decision="allow")
 prefix_rule(pattern=["uv", "run", "black", "--version"], decision="allow")
