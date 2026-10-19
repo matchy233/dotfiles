@@ -25,7 +25,9 @@ class CodexConfigMergeTest(unittest.TestCase):
             config_path = home / ".codex/config.toml"
             config_path.parent.mkdir(parents=True)
             config_path.write_text(
-                '[projects."/device/local/project"]\n'
+                'model = "gpt-6-luna"\n'
+                'model_reasoning_effort = "high"\n'
+                '\n[projects."/device/local/project"]\n'
                 'trust_level = "trusted"\n',
                 encoding="utf-8",
             )
@@ -52,8 +54,8 @@ class CodexConfigMergeTest(unittest.TestCase):
             with config_path.open("rb") as file:
                 config = tomllib.load(file)
 
-            self.assertEqual(config["model"], "gpt-5.6-sol")
-            self.assertEqual(config["model_reasoning_effort"], "medium")
+            self.assertEqual(config["model"], "gpt-6-luna")
+            self.assertEqual(config["model_reasoning_effort"], "high")
             self.assertEqual(
                 config["projects"]["/device/local/project"]["trust_level"],
                 "trusted",
