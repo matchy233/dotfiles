@@ -49,6 +49,11 @@ class SourceConfigTest(unittest.TestCase):
             local_index = content.index("local-profile.ps1")
             self.assertLess(shared_index, local_index, profile)
 
+    def test_fast_syntax_highlighting_uses_shipped_q_jmnemonic_theme(self) -> None:
+        zshrc = (ROOT / "home/dot_zshrc").read_text(encoding="utf-8")
+        self.assertIn("fast-theme -q q-jmnemonic", zshrc)
+        self.assertNotIn("fast-theme -q XDG:overlay", zshrc)
+
     def test_shared_source_has_no_absolute_linux_home_paths(self) -> None:
         absolute_home = re.compile(r"/home/[A-Za-z0-9._-]+")
         tracked_files = subprocess.run(
