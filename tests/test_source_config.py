@@ -24,6 +24,8 @@ class SourceConfigTest(unittest.TestCase):
         with path.open("rb") as file:
             config = tomllib.load(file)
         self.assertNotIn("projects", config)
+        self.assertNotIn("model", config)
+        self.assertNotIn("model_reasoning_effort", config)
 
     def test_shell_entrypoints_load_local_overrides_last(self) -> None:
         zshrc = (ROOT / "home/dot_zshrc").read_text(encoding="utf-8")
