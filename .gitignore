@@ -3,3 +3,4 @@ __pycache__/
 home/dot_zshrc.local
 home/dot_config/powershell/local-profile.ps1
 home/dot_agents/claude/cc-deepseek.settings.json
+home/dot_codex/rules/default.rules
