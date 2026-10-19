@@ -62,7 +62,7 @@ zinit light zsh-users/zsh-autosuggestions
 
 zinit ice lucid atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"
 zinit light zdharma-continuum/fast-syntax-highlighting
-fast-theme -q XDG:overlay
+fast-theme -q q-jmnemonic
 
 ### custom commands
 
