@@ -50,6 +50,10 @@ class TargetLayoutTest(unittest.TestCase):
                 ".agents/AGENTS.md",
                 ".agents/codex/config.shared.toml",
                 ".agents/install-skills.py",
+                ".codex/rules/git.rules",
+                ".config/fontconfig/fonts.conf",
+                ".config/fsh/overlay.ini",
+                ".config/starship.toml",
             ]:
                 self.assertTrue((home / relative).is_file(), relative)
 
@@ -85,7 +89,7 @@ class TargetLayoutTest(unittest.TestCase):
                     self.assertTrue(profile.is_file(), profile)
             else:
                 self.assertFalse((home / "Documents").exists(), "Documents")
-                self.assertFalse((home / ".config").exists(), ".config")
+                self.assertFalse(shared_profile.exists(), shared_profile)
 
     def test_second_apply_preserves_codex_projects(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
