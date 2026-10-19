@@ -7,3 +7,4 @@ Documents
 !.config/fontconfig
 !.config/fontconfig/**
 {{- end }}
+.codex/rules/default.rules
