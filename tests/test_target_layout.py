@@ -41,7 +41,15 @@ class TargetLayoutTest(unittest.TestCase):
     def test_expected_files_and_links_are_created(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory)
+            local_rules = home / ".codex/rules/default.rules"
+            local_rules.parent.mkdir(parents=True)
+            local_rules.write_text('device_local = "preserved"\n', encoding="utf-8")
             self.apply(home)
+
+            self.assertEqual(
+                local_rules.read_text(encoding="utf-8"),
+                'device_local = "preserved"\n',
+            )
 
             for relative in [
                 ".zshrc",
