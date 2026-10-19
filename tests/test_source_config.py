@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import re
+import subprocess
 import tomllib
 import unittest
 
@@ -48,9 +49,16 @@ class SourceConfigTest(unittest.TestCase):
 
     def test_shared_source_has_no_absolute_linux_home_paths(self) -> None:
         absolute_home = re.compile(r"/home/[A-Za-z0-9._-]+")
-        for path in (ROOT / "home").rglob("*"):
-            if not path.is_file():
+        tracked_files = subprocess.run(
+            ["git", "ls-files", "-z", "--", "home"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+        ).stdout.split(b"\0")
+        for relative in tracked_files:
+            if not relative:
                 continue
+            path = ROOT / relative.decode()
             content = path.read_text(encoding="utf-8")
             self.assertIsNone(absolute_home.search(content), path)
 
@@ -69,6 +77,7 @@ class SourceConfigTest(unittest.TestCase):
             "home/dot_zshrc.local",
             "home/dot_config/powershell/local-profile.ps1",
             "home/dot_agents/claude/cc-deepseek.settings.json",
+            "home/dot_codex/rules/default.rules",
         ]:
             self.assertIn(path, gitignore)
 
