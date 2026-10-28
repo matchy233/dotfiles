@@ -1,0 +1,24 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /* Make Shift+Enter send LF (same as Ctrl+J) so Claude Code inserts a newline. */ -}}
+{{- $settings := dict -}}
+{{- if ne (.chezmoi.stdin | trim) "" -}}
+{{-   $settings = .chezmoi.stdin | fromJson -}}
+{{- end -}}
+{{- $id := "User.claudeShiftEnterNewline" -}}
+{{- $actions := list -}}
+{{- range (get $settings "actions" | default list) -}}
+{{-   if ne (get . "id") $id -}}
+{{-     $actions = append $actions . -}}
+{{-   end -}}
+{{- end -}}
+{{- $actions = append $actions (dict "id" $id "command" (dict "action" "sendInput" "input" "\n")) -}}
+{{- $keybindings := list -}}
+{{- range (get $settings "keybindings" | default list) -}}
+{{-   if and (ne (get . "id") $id) (ne (get . "keys") "shift+enter") -}}
+{{-     $keybindings = append $keybindings . -}}
+{{-   end -}}
+{{- end -}}
+{{- $keybindings = append $keybindings (dict "id" $id "keys" "shift+enter") -}}
+{{- $_ := set $settings "actions" $actions -}}
+{{- $_ := set $settings "keybindings" $keybindings -}}
+{{ toPrettyJson $settings }}
