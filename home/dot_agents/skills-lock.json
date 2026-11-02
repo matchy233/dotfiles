@@ -36,6 +36,12 @@
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "5d94c0930f58405485bbac1f7bb2dce7ed833702257912a63dcaf03c8e83d78e"
+    },
+    "ub-mode": {
+      "source": "unclebob/ub-mode",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "e2e28ad6f12ce3bc1e5be6676b0dcd88c217957c79c512b418c241fa2e5825a0"
     }
   }
 }
