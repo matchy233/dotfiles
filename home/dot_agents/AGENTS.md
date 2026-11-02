@@ -28,6 +28,11 @@
 - Prefer Python over bash / PowerShell for scripts — avoids symbol-escaping issues (quotes, `$`, backticks).
 - Use bash / PowerShell only for trivial one-liners or shell-specific needs (pipelines, native CLI calls).
 
+## Code-Quality Tools (ub-mode companions)
+
+- `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`.
+- Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (first run builds the tool's own `.venv`). `mutator` expects `crapper` next to it, which this layout provides.
+
 ## Worklogs (Code Repos)
 
 Maintain a `worklogs/` directory at the repo root:
