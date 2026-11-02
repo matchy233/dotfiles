@@ -1,9 +1,7 @@
-{{- /* ub-mode's companion tools: separate repos, not part of the skill install. */ -}}
-{{- if ne .chezmoi.os "windows" }}
+{{- /* ub-mode's companion tools: separate repos, not part of the skill install. All platforms. */ -}}
 {{- range list "crapper" "dryer" "mutator" }}
 [".agents/tools/unclebob/{{ . }}"]
     type = "git-repo"
     url = "https://github.com/unclebob/{{ . }}.git"
     refreshPeriod = "168h"
 {{ end -}}
-{{- end }}
