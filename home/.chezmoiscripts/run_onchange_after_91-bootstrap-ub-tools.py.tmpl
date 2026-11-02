@@ -1,0 +1,70 @@
+{{- if ne .chezmoi.os "windows" -}}
+#!/usr/bin/env python3
+# Build the virtualenvs of the ub-mode companion tools with uv, installing uv first if needed.
+# externals-sha256: {{ include ".chezmoiexternal.toml.tmpl" | sha256sum }}
+
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+HOME = Path({{ .chezmoi.homeDir | quote }})
+TOOLS = HOME / ".agents/tools/unclebob"
+PYTHON = "3.12"  # uv downloads a managed CPython when no suitable one is installed
+
+
+def find_uv() -> str:
+    found = shutil.which("uv") or shutil.which("uv", path=str(HOME / ".local/bin"))
+    if found:
+        return found
+    print("uv not found; installing with the official installer")
+    subprocess.run(
+        "curl -LsSf https://astral.sh/uv/install.sh | sh", shell=True, check=True
+    )
+    found = shutil.which("uv", path=str(HOME / ".local/bin")) or shutil.which("uv")
+    if not found:
+        raise SystemExit("uv installation did not produce an executable")
+    return found
+
+
+def venv_works(tool: Path) -> bool:
+    python = tool / ".venv/bin/python"
+    if not python.exists():
+        return False
+    check = subprocess.run([str(python), "-c", f"import {tool.name}"], capture_output=True)
+    return check.returncode == 0
+
+
+def build(tool: Path, uv: str) -> None:
+    venv = tool / ".venv"
+    shutil.rmtree(venv, ignore_errors=True)
+    subprocess.run([uv, "venv", "-q", "--python", PYTHON, str(venv)], cwd=tool, check=True)
+    subprocess.run(
+        [uv, "pip", "install", "-q", "--python", str(venv / "bin/python"), "-e", "."],
+        cwd=tool,
+        check=True,
+    )
+    if not venv_works(tool):
+        raise SystemExit(f"{tool.name}: virtualenv built but `import {tool.name}` fails")
+
+
+def main() -> None:
+    tools = sorted(p for p in TOOLS.glob("*") if (p / "pyproject.toml").is_file())
+    if not tools:
+        print(f"no tools under {TOOLS}; nothing to build")
+        return
+    uv = None
+    for tool in tools:
+        if venv_works(tool):
+            print(f"{tool.name}: ok")
+            continue
+        uv = uv or find_uv()
+        build(tool, uv)
+        print(f"{tool.name}: built")
+
+
+if __name__ == "__main__":
+    os.environ.setdefault("UV_NO_PROGRESS", "1")
+    sys.exit(main())
+{{- end }}
