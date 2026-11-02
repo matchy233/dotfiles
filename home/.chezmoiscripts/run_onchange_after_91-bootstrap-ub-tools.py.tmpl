@@ -1,6 +1,6 @@
-{{- if ne .chezmoi.os "windows" -}}
 #!/usr/bin/env python3
 # Build the virtualenvs of the ub-mode companion tools with uv, installing uv first if needed.
+# Works on Linux, macOS and Windows; re-running is a no-op once every tool imports.
 # externals-sha256: {{ include ".chezmoiexternal.toml.tmpl" | sha256sum }}
 
 import os
@@ -12,24 +12,57 @@ from pathlib import Path
 HOME = Path({{ .chezmoi.homeDir | quote }})
 TOOLS = HOME / ".agents/tools/unclebob"
 PYTHON = "3.12"  # uv downloads a managed CPython when no suitable one is installed
+WINDOWS = sys.platform == "win32"
+UV_INSTALL_DIR = HOME / ".local/bin"  # passed to the installer, so the location is known
+# Where uv may already live when it is not on PATH (current and older installer defaults).
+UV_DIRS = [UV_INSTALL_DIR, HOME / ".cargo/bin"]
+UV_NAME = "uv.exe" if WINDOWS else "uv"
+
+
+def locate_uv():
+    found = shutil.which("uv")
+    if found:
+        return found
+    for directory in UV_DIRS:
+        candidate = directory / UV_NAME
+        if candidate.is_file():
+            return str(candidate)
+    return None
+
+
+def install_uv() -> None:
+    env = dict(os.environ, UV_INSTALL_DIR=str(UV_INSTALL_DIR), UV_NO_MODIFY_PATH="1")
+    if WINDOWS:
+        command = [
+            "powershell", "-NoProfile", "-ExecutionPolicy", "ByPass", "-Command",
+            "irm https://astral.sh/uv/install.ps1 | iex",
+        ]
+        subprocess.run(command, check=True, env=env)
+        return
+    fetch = "curl -LsSf" if shutil.which("curl") else "wget -qO-"
+    if fetch.startswith("wget") and not shutil.which("wget"):
+        raise SystemExit("neither curl nor wget is available to download the uv installer")
+    subprocess.run(f"{fetch} https://astral.sh/uv/install.sh | sh", shell=True, check=True, env=env)
 
 
 def find_uv() -> str:
-    found = shutil.which("uv") or shutil.which("uv", path=str(HOME / ".local/bin"))
+    found = locate_uv()
     if found:
         return found
-    print("uv not found; installing with the official installer")
-    subprocess.run(
-        "curl -LsSf https://astral.sh/uv/install.sh | sh", shell=True, check=True
-    )
-    found = shutil.which("uv", path=str(HOME / ".local/bin")) or shutil.which("uv")
+    print(f"uv not found; installing it into {UV_INSTALL_DIR}")
+    install_uv()
+    found = locate_uv()
     if not found:
-        raise SystemExit("uv installation did not produce an executable")
+        raise SystemExit("uv installation did not produce an executable in a known location")
     return found
 
 
+def venv_python(tool: Path) -> Path:
+    return tool / ".venv" / ("Scripts/python.exe" if WINDOWS else "bin/python")
+
+
 def venv_works(tool: Path) -> bool:
-    python = tool / ".venv/bin/python"
+    python = venv_python(tool)
     if not python.exists():
         return False
     check = subprocess.run([str(python), "-c", f"import {tool.name}"], capture_output=True)
@@ -41,7 +74,7 @@ def build(tool: Path, uv: str) -> None:
     shutil.rmtree(venv, ignore_errors=True)
     subprocess.run([uv, "venv", "-q", "--python", PYTHON, str(venv)], cwd=tool, check=True)
     subprocess.run(
-        [uv, "pip", "install", "-q", "--python", str(venv / "bin/python"), "-e", "."],
+        [uv, "pip", "install", "-q", "--python", str(venv_python(tool)), "-e", "."],
         cwd=tool,
         check=True,
     )
@@ -67,4 +100,3 @@ def main() -> None:
 if __name__ == "__main__":
     os.environ.setdefault("UV_NO_PROGRESS", "1")
     sys.exit(main())
-{{- end }}

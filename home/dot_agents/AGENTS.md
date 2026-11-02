@@ -31,7 +31,7 @@
 ## Code-Quality Tools (ub-mode companions)
 
 - `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`.
-- Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (first run builds the tool's own `.venv`). `mutator` expects `crapper` next to it, which this layout provides.
+- Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (Linux/macOS); on Windows run `~/.agents/tools/unclebob/<tool>/.venv/Scripts/python -m <tool>`. A chezmoi script builds each tool's `.venv` with uv (and installs uv if missing). `mutator` expects `crapper` next to it, which this layout provides.
 
 ## Worklogs (Code Repos)
 
