@@ -4,5 +4,9 @@
 # Shared WSL-specific settings
 export WIN_FONT_DIR="/mnt/c/Windows/Fonts"
 
+if [[ -d /mnt/c/Users/<windows-user>/scoop/shims && ":$PATH:" != *:/mnt/c/Users/<windows-user>/scoop/shims:* ]]; then
+    export PATH="$PATH:/mnt/c/Users/<windows-user>/scoop/shims"
+fi
+
 {{- end }}
 {{- end }}
