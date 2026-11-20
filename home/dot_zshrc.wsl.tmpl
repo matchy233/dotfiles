@@ -8,5 +8,11 @@ if [[ -d /mnt/c/Users/<windows-user>/scoop/shims && ":$PATH:" != *:/mnt/c/Users/
     export PATH="$PATH:/mnt/c/Users/<windows-user>/scoop/shims"
 fi
 
+if command -v op.exe >/dev/null 2>&1; then
+    alias op='op.exe'
+elif [[ -x /mnt/c/Users/<windows-user>/scoop/apps/1password-cli/current/op.exe ]]; then
+    alias op='/mnt/c/Users/<windows-user>/scoop/apps/1password-cli/current/op.exe'
+fi
+
 {{- end }}
 {{- end }}
