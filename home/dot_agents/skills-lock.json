@@ -1,47 +1,54 @@
 {
-  "version": 3,
+  "version": 2,
   "skills": {
     "caveman-commit": {
       "source": "juliusbrussee/caveman",
+      "commit": "a192894723a8f47e7f504c7b5041967ff1f18e55",
       "sourceType": "github",
       "skillPath": "skills/caveman-commit/SKILL.md",
-      "computedHash": "f028652defd5fdeddcce2994083cb1a7b201ee827bba8e2495546ee159fca3de"
+      "computedHash": "2c1472fb59eedd3cfba0b6512dc470a00287343ade421db55c21a6fb52afbe86"
     },
     "chezmoi": {
       "source": "matchy233/skills",
+      "commit": "bc670982263222dd0b0149859a604c3a34a4fa80",
       "sourceType": "github",
       "skillPath": "skills/chezmoi/SKILL.md",
-      "computedHash": "1002ed8e43b791b4f812f966da2daee3d892560c757417591115aca3f51dd916"
+      "computedHash": "5594003e9afed27f59ddd060e3b8072436190f7070952a0af28525c101852f74"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
+      "commit": "57217cf86ba38148a57af9e90d14a4c049558330",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
-      "computedHash": "9e1c8b3103f92fa8092568a44fe64858de7c5c9dc65ce4bea8f168080e889cfd"
+      "computedHash": "7bc223e2aafbdbf6e50ea243ba6ef67fe432bb069ab439fea0390795dac0bf7f"
     },
     "grill-me": {
       "source": "mattpocock/skills",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823",
       "sourceType": "github",
       "skillPath": "skills/productivity/grill-me/SKILL.md",
-      "computedHash": "67e31b63e6e9e454cc2f51cd85b9cf1396ee46379a87c07a1450f33c47c1276a"
+      "computedHash": "ab1acb9fbd9eaee03da254abb8a8de228d1e7a07475fe959da4a5eefa34ea4b9"
     },
     "skill-creator": {
       "source": "anthropics/skills",
+      "commit": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
       "sourceType": "github",
       "skillPath": "skills/skill-creator/SKILL.md",
-      "computedHash": "7e3c9cd74e9e2b4828527a857170e86310f2dab5ea8030a9043df2c7e6c88857"
+      "computedHash": "2d7f889e6ae93c6c27d699856942c336b5b8644537496987d5571043d059b1dc"
     },
     "tdd": {
       "source": "mattpocock/skills",
+      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823",
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
-      "computedHash": "5d94c0930f58405485bbac1f7bb2dce7ed833702257912a63dcaf03c8e83d78e"
+      "computedHash": "e3e0f78ff1c2d52ffefa0378baa1e80e129d359288cf9a56f4e59afcd2aac86c"
     },
     "ub-mode": {
       "source": "unclebob/ub-mode",
+      "commit": "3da62bf3fcfd2034de41f30d920d2739e566171f",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "e2e28ad6f12ce3bc1e5be6676b0dcd88c217957c79c512b418c241fa2e5825a0"
+      "computedHash": "e0ab965e4367a86ece58520732a16d1a9bd4d5dcca3f49aabd440c7a01d300f0"
     }
   }
 }

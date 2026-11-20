@@ -37,7 +37,7 @@ class SkillInstallerTest(unittest.TestCase):
         lock_path.write_text(
             json.dumps(
                 {
-                    "version": 3,
+                    "version": 2,
                     "skills": {
                         name: {
                             "source": "owner/repository",

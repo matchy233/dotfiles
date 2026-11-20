@@ -165,7 +165,7 @@ declared skill exists, and then replaces only declared skill directories under
 `~/.agents/skills`. Undeclared local skills are left in place.
 
 To add a third-party skill, update a temporary copy with the CLI and move the
-generated version 3 lock back into the source. This keeps the CLI-generated
+generated project lock back into the source. This keeps the CLI-generated
 `computedHash` instead of writing it manually. For example:
 
 ```sh
