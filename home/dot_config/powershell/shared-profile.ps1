@@ -9,6 +9,21 @@ $ErrorView = 'CategoryView'
 
 ### CUSTOM FUNCTIONS ###
 
+function Get-CommandPath {
+    param (
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$Name,
+        [Alias('a')]
+        [switch]$All
+    )
+
+    $commands = Get-Command -Name $Name -CommandType Application, ExternalScript
+    if (-not $All) {
+        $commands = $commands | Select-Object -First 1
+    }
+    $commands.Source
+}
+
 # function fn_showconfig {
 #     python $HOME\.local\bin\sshconfig.py $args
 # }
@@ -363,5 +378,5 @@ set-alias -Name rmdup -Value Remove-DupDownloads -Option AllScope
 set-alias -Name sshconfig -Value fn_showconfig
 set-alias -Name cd -Value cd_custom -Option AllScope
 set-alias -Name ls -Value ls_custom -Option AllScope
-set-alias -Name which -Value get-command
+set-alias -Name which -Value Get-CommandPath
 set-alias -Name unzip -Value unzip_custom -Option AllScope
