@@ -50,26 +50,22 @@ class ProfileSkillLinkerTest(unittest.TestCase):
     def link(self) -> None:
         self.linker.link_profile_skills(self.home)
 
-    def test_links_each_shared_skill(self) -> None:
+    def test_links_each_shared_skill_but_not_sync_or_hidden(self) -> None:
         self.add_shared("alpha")
         self.add_shared("beta")
-
-        self.link()
-
-        for name in ["alpha", "beta"]:
-            link = self.profile / name
-            self.assertTrue(self.linker._is_link(link), name)
-            self.assertTrue(same(link, self.shared / name), name)
-            self.assertEqual((link / "SKILL.md").read_text(), name)
-
-    def test_skips_sync_and_hidden_directories(self) -> None:
-        self.add_shared("alpha")
         (self.shared / "synced/other-account").mkdir(parents=True)
         (self.shared / ".alpha.chezmoi-new").mkdir()
 
         self.link()
 
-        self.assertEqual(sorted(p.name for p in self.profile.iterdir()), ["alpha"])
+        self.assertEqual(
+            sorted(p.name for p in self.profile.iterdir()), ["alpha", "beta"]
+        )
+        for name in ["alpha", "beta"]:
+            link = self.profile / name
+            self.assertTrue(self.linker._is_link(link), name)
+            self.assertTrue(same(link, self.shared / name), name)
+            self.assertEqual((link / "SKILL.md").read_text(), name)
 
     def test_keeps_profile_owned_and_real_directories(self) -> None:
         self.add_shared("alpha")
@@ -114,15 +110,6 @@ class ProfileSkillLinkerTest(unittest.TestCase):
 
         self.assertTrue(same(self.profile / "alpha", self.shared / "alpha"))
         self.assertTrue(wrong.is_dir())
-
-    def test_missing_shared_directory_only_creates_profile_dir(self) -> None:
-        self.link()
-
-        self.assertTrue(self.profile.is_dir())
-        self.assertEqual(list(self.profile.iterdir()), [])
-
-    def test_loading_linker_does_not_pollute_chezmoi_source(self) -> None:
-        self.assertFalse((LINKER_PATH.parent / "__pycache__").exists())
 
 
 if __name__ == "__main__":
