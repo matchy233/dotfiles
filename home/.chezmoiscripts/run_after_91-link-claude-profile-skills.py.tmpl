@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+from pathlib import Path
+import runpy
+
+
+runpy.run_path(
+    str(Path({{ .chezmoi.homeDir | quote }}) / ".agents/link-profile-skills.py"),
+    run_name="__main__",
+)

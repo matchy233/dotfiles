@@ -179,6 +179,16 @@ cp "$tmpdir/skills-lock.json" home/dot_agents/skills-lock.json
 
 Review the lock diff and run the tests before committing it.
 
+Claude Code only reads skills from `<config dir>/skills`. `~/.claude/skills`
+links to `~/.agents/skills` as a whole. Profiles with a custom
+`CLAUDE_CONFIG_DIR`, such as the T3 Code profile `~/.claude.tesla`, cannot do
+that: their own claude.ai sync writes `skills/synced/` there. On every apply,
+`run_after_91-link-claude-profile-skills.py` links each shared skill into
+those profiles one by one, and removes links to skills that no longer exist.
+It never touches `synced/` or real directories. On Windows without Developer
+Mode it falls back to directory junctions. Add new profile directories to
+`PROFILE_DIRS` in `home/dot_agents/link-profile-skills.py`.
+
 ## Layout
 
 ```text
