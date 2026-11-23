@@ -71,6 +71,8 @@ class TargetLayoutTest(unittest.TestCase):
                 ".claude/CLAUDE.md": ".agents/AGENTS.md",
                 ".claude/settings.json": ".agents/claude/settings.json",
                 ".claude/skills": ".agents/skills",
+                ".claude.tesla/settings.json": ".agents/claude/settings.json",
+                ".claude.tesla/keybindings.json": ".agents/claude/keybindings.json",
             }
             for link_name, target_name in links.items():
                 link = home / link_name

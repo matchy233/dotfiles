@@ -11,6 +11,7 @@ Claude Code and Codex to the shared files they need.
 - Shared agent instructions: `~/.agents/AGENTS.md`.
 - Shared and custom skills: `~/.agents/skills/`.
 - Claude Code settings and links below `~/.claude/`.
+- The same shared settings for the T3 Code Claude profile in `~/.claude.tesla/`.
 - Codex shared defaults, custom agent profiles, and links below `~/.codex/`.
 - Windows PowerShell 5.1 and PowerShell 7 profiles that load shared settings.
 
@@ -189,6 +190,7 @@ Review the lock diff and run the tests before committing it.
 `-- home/
     |-- dot_agents/               # becomes ~/.agents
     |-- dot_claude/               # shared Claude Code links
+    |-- dot_claude.tesla/         # same links for the T3 Code profile
     |-- dot_codex/                # shared Codex links and modify template
     |-- dot_zshrc
     |-- dot_condarc
