@@ -1,0 +1,5 @@
+**/.claude/settings.local.json
+
+# Per-repo agent memory (see ~/.agents/AGENTS.md); worklogs is the legacy symlink.
+/brain/
+/worklogs

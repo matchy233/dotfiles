@@ -7,5 +7,7 @@ Documents
 !.config/fsh/**
 !.config/fontconfig
 !.config/fontconfig/**
+!.config/git
+!.config/git/**
 {{- end }}
 .codex/rules/default.rules
