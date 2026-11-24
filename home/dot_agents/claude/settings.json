@@ -6,11 +6,18 @@
   },
   "permissions": {
     "allow": [],
-    "deny": []
+    "deny": [],
+    "defaultMode": "auto"
   },
   "hooks": {},
+  "statusLine": {
+    "type": "command",
+    "command": "python3 -I ~/.claude/statusline-command.py"
+  },
   "autoUpdatesChannel": "latest",
   "tui": "default",
   "theme": "auto",
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "switchModelsOnFlag": false,
+  "agentPushNotifEnabled": true
 }
