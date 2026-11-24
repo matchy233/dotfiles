@@ -37,7 +37,7 @@
 
 Each repo keeps a `brain/` directory at its root: project memory plus work records, shared by every agent.
 
-- `brain/index.md` — entry point; lists every brain file as a relative markdown link (`[title](notes/x.md)`), no inlined content.
+- `brain/index.md` — entry point: relative markdown links (`[title](notes/x.md)`) to every note, design doc, plan and changelog, plus the `logs/` folder and other artifact folders. No inlined content.
 - `brain/notes/` — durable project knowledge: gotchas, decisions the user stated, tool quirks. One topic per file, lowercase-hyphenated name, under ~50 lines.
 - `brain/design/` — architecture decisions, component design, API contracts.
 - `brain/changelog/` — what changed and why, beyond `git log`.
@@ -48,7 +48,7 @@ Reading:
 
 - At session start in a repo, read `brain/index.md` if it exists, then the notes relevant to the task.
 - In a git worktree, `brain/` lives in the main checkout: the parent of `git rev-parse --path-format=absolute --git-common-dir`.
-- A repo with `worklogs/` and no `brain/` is a legacy brain: use `worklogs/` the same way. Don't rename it unless the user asks; scheduled tasks may reference its paths.
+- `worklogs` next to `brain/` is a symlink kept for old path references; write through `brain/`. A repo with a real `worklogs/` directory and no `brain/` hasn't been migrated: use `worklogs/` the same way and don't rename it unless the user asks (scheduled tasks may reference its paths).
 
 Writing:
 
@@ -59,5 +59,5 @@ Writing:
 The brain is local by default:
 
 - Don't stage/commit `brain/` files unless the user explicitly asks for a specific one.
-- Prefer gitignoring `brain/`; if a branch needs that `.gitignore` update, make it a separate atomic commit (droppable later via rebase).
+- `/brain/` and `/worklogs` are ignored by the global git ignore (`~/.config/git/ignore`, managed by chezmoi), so repos don't need a `.gitignore` entry.
 - Summarize useful brain content in the PR body instead of committing the files.
