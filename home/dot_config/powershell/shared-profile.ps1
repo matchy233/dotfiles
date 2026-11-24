@@ -3,8 +3,21 @@ $env:STARSHIP_CONFIG = "$HOME\.config\starship.toml"
 $env:Path += ";$HOME\.local\bin"
 
 ### GLOBAL SETTINGS ###
-# Suppress multiline warning
-$ErrorView = 'CategoryView'
+# Non-interactive runs (`powershell -c ...`, `-File`, as used by `codex update`)
+# must not load PSReadLine: Windows PowerShell's bundled PSReadLine 2.0 defines
+# its own System.Runtime.InteropServices.RuntimeInformation without
+# OSArchitecture, which shadows the real type and breaks installer scripts.
+$commandLineArgs = [Environment]::GetCommandLineArgs()
+$isInteractiveShell = [Environment]::UserInteractive -and (
+    ($commandLineArgs -match '^-noexit$') -or
+    -not ($commandLineArgs -match '^-(c|com|command|f|file|e|ec|enc|encodedcommand)$')
+)
+Remove-Variable commandLineArgs
+
+if ($isInteractiveShell) {
+    # Suppress multiline warning
+    $ErrorView = 'CategoryView'
+}
 
 
 ### CUSTOM FUNCTIONS ###
@@ -364,13 +377,17 @@ function Invoke-Starship-PreCommand {
     $host.ui.Write($prompt)
 }
 
-Invoke-Expression (&starship init powershell)
-# Get-ChildItem "$PROFILE\..\Completions\" | ForEach-Object {
-#     . $_.FullName
-# }
+if ($isInteractiveShell) {
+    Invoke-Expression (&starship init powershell)
+    # Get-ChildItem "$PROFILE\..\Completions\" | ForEach-Object {
+    #     . $_.FullName
+    # }
 
-###
-set-psreadlineoption -colors @{ "InlinePrediction" = "#838383" }
+    # InlinePrediction needs PSReadLine 2.1+; Windows PowerShell ships 2.0.
+    if ((Get-Module PSReadLine).Version -ge [version]'2.1') {
+        set-psreadlineoption -colors @{ "InlinePrediction" = "#838383" }
+    }
+}
 
 ### Alias
 set-alias -Name touch -Value New-Item
