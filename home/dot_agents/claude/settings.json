@@ -5,7 +5,10 @@
     "pr": ""
   },
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Bash(chezmoi *)",
+      "PowerShell(chezmoi *)"
+    ],
     "deny": [],
     "defaultMode": "auto"
   },
