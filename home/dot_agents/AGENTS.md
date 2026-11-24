@@ -33,19 +33,31 @@
 - `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`.
 - Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (Linux/macOS); on Windows run `~/.agents/tools/unclebob/<tool>/.venv/Scripts/python -m <tool>`. A chezmoi script builds each tool's `.venv` with uv (and installs uv if missing). `mutator` expects `crapper` next to it, which this layout provides.
 
-## Worklogs (Code Repos)
+## Brain (Code Repos)
 
-Maintain a `worklogs/` directory at the repo root:
+Each repo keeps a `brain/` directory at its root: project memory plus work records, shared by every agent.
 
-1. **Design docs** (`worklogs/design/`) — architecture decisions, component design, API contracts.
-2. **Changelog** (`worklogs/changelog/`) — what changed and why, beyond `git log`.
-3. **Plans** (`worklogs/plans/`) — execution-ready plans a subagent can run with.
-4. **Agent operation logs** (`worklogs/<agent-identity>-YYYY-MM-DD.md`) — dated record of the session.
+- `brain/index.md` — entry point; lists every brain file as a relative markdown link (`[title](notes/x.md)`), no inlined content.
+- `brain/notes/` — durable project knowledge: gotchas, decisions the user stated, tool quirks. One topic per file, lowercase-hyphenated name, under ~50 lines.
+- `brain/design/` — architecture decisions, component design, API contracts.
+- `brain/changelog/` — what changed and why, beyond `git log`.
+- `brain/plans/` — execution-ready plans a subagent can run with.
+- `brain/logs/<agent-identity>-YYYY-MM-DD.md` — operation logs: purpose, key decisions and reasoning, branch/base or remote-sync corrections, abandoned approaches with reasons, current local state.
 
-Operation logs must cover: purpose, key decisions and reasoning, branch/base or remote-sync corrections, abandoned approaches with reasons, and current local state.
+Reading:
 
-Worklogs are local by default:
+- At session start in a repo, read `brain/index.md` if it exists, then the notes relevant to the task.
+- In a git worktree, `brain/` lives in the main checkout: the parent of `git rev-parse --path-format=absolute --git-common-dir`.
+- A repo with `worklogs/` and no `brain/` is a legacy brain: use `worklogs/` the same way. Don't rename it unless the user asks; scheduled tasks may reference its paths.
 
-- Don't stage/commit `worklogs/` files unless the user explicitly asks for a specific one.
-- Prefer gitignoring `worklogs/`; if a branch needs that `.gitignore` update, make it a separate atomic commit (droppable later via rebase).
-- Summarize useful worklog content in the PR body instead of committing the files.
+Writing:
+
+- After a correction or a stated decision that would matter in a different task, add or update a note in `brain/notes/` and its index line. Merge into an existing note before creating a new one; delete notes that turn out wrong.
+- If a lesson can be enforced by a lint rule, hook, script, or permission setting, propose that instead of a note.
+- Preferences that apply to every project belong in this global file, not a repo brain: propose the edit to the user instead of writing it into the repo.
+
+The brain is local by default:
+
+- Don't stage/commit `brain/` files unless the user explicitly asks for a specific one.
+- Prefer gitignoring `brain/`; if a branch needs that `.gitignore` update, make it a separate atomic commit (droppable later via rebase).
+- Summarize useful brain content in the PR body instead of committing the files.
