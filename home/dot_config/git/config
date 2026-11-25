@@ -1,0 +1,4 @@
+# Shared Git settings managed by chezmoi. Machine-specific settings
+# (identity, signing, credentials) stay in ~/.gitconfig, which Git reads after this file.
+[pull]
+	rebase = true
