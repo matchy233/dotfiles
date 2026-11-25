@@ -15,6 +15,14 @@
       "skillPath": "skills/chezmoi/SKILL.md",
       "computedHash": "5594003e9afed27f59ddd060e3b8072436190f7070952a0af28525c101852f74"
     },
+    "correct": {
+      "source": "matchy233/skills",
+      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "sourceType": "github",
+      "skillPath": "skills/correct/SKILL.md",
+      "computedHash": "b2d2e359096fd69971352acb7b5de5512ca6534d8198c5d027eb8669ae7fb8b8",
+      "installMode": "copy"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "commit": "57217cf86ba38148a57af9e90d14a4c049558330",
@@ -28,6 +36,30 @@
       "sourceType": "github",
       "skillPath": "skills/productivity/grill-me/SKILL.md",
       "computedHash": "ab1acb9fbd9eaee03da254abb8a8de228d1e7a07475fe959da4a5eefa34ea4b9"
+    },
+    "reflect": {
+      "source": "matchy233/skills",
+      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "sourceType": "github",
+      "skillPath": "skills/reflect/SKILL.md",
+      "computedHash": "f830cfc99dccbcdceb879eee3ca5b1342f680ef0f650fa445f2336ed492aa369",
+      "installMode": "copy"
+    },
+    "reframe": {
+      "source": "matchy233/skills",
+      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "sourceType": "github",
+      "skillPath": "skills/reframe/SKILL.md",
+      "computedHash": "5df65dc59a1dd63eb6787502d191d1ac90c2fc1ca68a82d037ba891941b26567",
+      "installMode": "copy"
+    },
+    "sharpen": {
+      "source": "matchy233/skills",
+      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "sourceType": "github",
+      "skillPath": "skills/sharpen/SKILL.md",
+      "computedHash": "85a8e05461d506146669e31feb0218a4d2248ea9716c594309794feea12a1cce",
+      "installMode": "copy"
     },
     "skill-creator": {
       "source": "anthropics/skills",
