@@ -123,7 +123,7 @@ if [[ -r "$HOME/.zshrc.wsl" ]]; then
     source "$HOME/.zshrc.wsl"
 fi
 
-# pixi (conda-forge/bioconda packages per project); installed by https://pixi.sh/install.sh
+# pixi itself comes from .chezmoidata/packages.yaml; ~/.pixi/bin holds `pixi global` tools.
 export PATH="$HOME/.pixi/bin:$PATH"
 
 # Device-local settings load last and can override shared defaults.

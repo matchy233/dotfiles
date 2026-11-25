@@ -31,6 +31,8 @@ packages:
     - {name: bat, scoop: bat, nix: bat}
   dev:
     - {name: rustup, scoop: rustup, nix: rustup}
+    # Per-project conda-forge/bioconda environments; conda and mamba are not used.
+    - {name: pixi, scoop: pixi, nix: pixi}
     - name: vs-build-tools
       winget: Microsoft.VisualStudio.2022.BuildTools
       # The C++ workload rustup's msvc toolchain needs. Asks for admin (UAC) once.
