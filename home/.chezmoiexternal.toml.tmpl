@@ -5,3 +5,10 @@
     url = "https://github.com/unclebob/{{ . }}.git"
     refreshPeriod = "168h"
 {{ end -}}
+{{- /* nvs on Linux is a git checkout; Windows gets it from scoop (.chezmoidata/packages.yaml). */ -}}
+{{- if eq .chezmoi.os "linux" }}
+[".nvs"]
+    type = "git-repo"
+    url = "https://github.com/jasongin/nvs.git"
+    refreshPeriod = "168h"
+{{ end -}}
