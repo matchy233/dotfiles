@@ -28,7 +28,15 @@
 - Prefer Python over bash / PowerShell for scripts — avoids symbol-escaping issues (quotes, `$`, backticks).
 - Use bash / PowerShell only for trivial one-liners or shell-specific needs (pipelines, native CLI calls).
 
-## Code-Quality Tools (ub-mode companions)
+## Writing Code (ub-mode)
+
+- Before writing or changing code, load the `ub-mode` skill and follow it: First Make it Work, Then Make it Right, Practice. This applies to code in any repo, not only when the user types `/ub-mode`. Config files, docs and one-off shell commands are exempt.
+- Run `crapper`, `dryer` and `mutator` on the changed code when the repo has tests and its language is supported (Clojure, Java, Go, TypeScript, Rust, Python). If you skip a tool, say which and why in the final report.
+- Where ub-mode conflicts with this file, this file wins:
+    - "Commit and Push": commit per Git Workflow below; push only when the user asks, and branch first when on the default branch. Never push straight to the main line.
+    - "Keep a Log": the log is `brain/logs/<agent-identity>-YYYY-MM-DD.md`.
+
+### Tool locations
 
 - `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`.
 - Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (Linux/macOS); on Windows run `~/.agents/tools/unclebob/<tool>/.venv/Scripts/python -m <tool>`. A chezmoi script builds each tool's `.venv` with uv (and installs uv if missing). `mutator` expects `crapper` next to it, which this layout provides.
@@ -55,6 +63,7 @@ Writing:
 - After a correction or a stated decision that would matter in a different task, add or update a note in `brain/notes/` and its index line. Merge into an existing note before creating a new one; delete notes that turn out wrong.
 - If a lesson can be enforced by a lint rule, hook, script, or permission setting, propose that instead of a note.
 - Preferences that apply to every project belong in this global file, not a repo brain: propose the edit to the user instead of writing it into the repo.
+- The `reflect` skill does this routing for a whole conversation; `correct` turns repeated mistakes into checks.
 
 The brain is local by default:
 
