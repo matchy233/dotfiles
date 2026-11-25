@@ -12,7 +12,19 @@
     "deny": [],
     "defaultMode": "auto"
   },
-  "hooks": {},
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I ~/.claude/hooks/fxtwitter-webfetch.py"
+          }
+        ]
+      }
+    ]
+  },
   "statusLine": {
     "type": "command",
     "command": "python3 -I ~/.claude/statusline-command.py"
