@@ -9,5 +9,10 @@ Documents
 !.config/fontconfig/**
 !.config/git
 !.config/git/**
+!.config/home-manager
+!.config/home-manager/**
+.local/bin/install-packages.py
+{{- else }}
+.config/home-manager
 {{- end }}
 .codex/rules/default.rules

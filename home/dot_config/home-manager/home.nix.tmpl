@@ -1,0 +1,26 @@
+{{- $role := dig "role" "server" . -}}
+{{- $tiers := list "base" -}}
+{{- if has $role (list "dev" "desktop") }}{{ $tiers = append $tiers "dev" }}{{ end -}}
+{{- $wsl := contains "microsoft" (dig "kernel" "osrelease" "" .chezmoi | lower) -}}
+# Managed by chezmoi from .chezmoidata/packages.yaml (role: {{ $role }}). Edit that file instead.
+# Only installs packages; dotfiles stay with chezmoi.
+{ pkgs, ... }:
+{
+  home.username = {{ .chezmoi.username | quote }};
+  home.homeDirectory = {{ .chezmoi.homeDir | quote }};
+  home.stateVersion = "25.11";
+  programs.home-manager.enable = true;
+
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "1password-cli" ];
+
+  home.packages = with pkgs; [
+{{- range $tier := $tiers }}
+    # {{ $tier }}
+{{- range (index $.packages $tier) }}
+{{- if and (dig "nix" "" .) (not (and $wsl (dig "skip_wsl" false .))) }}
+    {{ dig "nix" "" . }}
+{{- end }}
+{{- end }}
+{{- end }}
+  ];
+}

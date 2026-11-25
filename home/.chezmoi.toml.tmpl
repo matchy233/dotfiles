@@ -1,0 +1,13 @@
+{{- /* role picks which package tiers this machine installs (see .chezmoidata/packages.yaml):
+       server  = base
+       dev     = base + dev
+       desktop = base + dev; GUI apps via `install-packages.py --desktop` on Windows */ -}}
+{{- $role := promptChoiceOnce . "role" "Machine role" (list "server" "dev" "desktop") -}}
+encryption = "age"
+
+[age]
+    identity = "~/age-key.txt"
+    recipient = "age192vgp83xfaq9747jsjyndd758qchfyy7f8h4vjn73nqhj36tt5pssavthr"
+
+[data]
+    role = {{ $role | quote }}

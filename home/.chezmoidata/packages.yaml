@@ -1,0 +1,58 @@
+# Software every machine should have, by tier. Each entry names the package for
+# each installer; an installer that is missing means "not installed that way".
+#   scoop / winget: Windows   nix: Linux (home-manager, see .config/home-manager)
+# Tiers by machine role (.chezmoi.toml.tmpl):
+#   base    -> every machine           (installed by chezmoi apply)
+#   dev     -> dev and desktop roles   (installed by chezmoi apply)
+#   desktop -> desktop role, Windows   (GUI apps; run install-desktop-apps yourself,
+#                                       because many of them open and ask you to log in)
+# Not listed on purpose:
+#   uv          Windows: its own installer (see run_onchange_after_91-bootstrap-ub-tools)
+#   nvs         Linux: git checkout at ~/.nvs (see .chezmoiexternal.toml.tmpl)
+#   python      managed by uv
+#   C++ on Linux: system compiler from apt (build-essential); the script only checks it
+packages:
+  base:
+    - {name: git, winget: Git.Git, nix: git}
+    - {name: gh, scoop: gh, nix: gh}
+    - {name: chezmoi, scoop: chezmoi, nix: chezmoi}
+    # WSL calls the Windows op.exe (see dot_zshrc.wsl.tmpl), so skip it there.
+    - {name: 1password-cli, scoop: 1password-cli, nix: _1password-cli, skip_wsl: true}
+    - {name: gpg, scoop: gpg, nix: gnupg}
+    - {name: starship, scoop: starship, nix: starship}
+    - {name: vim, scoop: vim, nix: vim}
+    - {name: uv, nix: uv}
+    - {name: nvs, scoop: nvs}
+    - {name: pnpm, scoop: pnpm, nix: pnpm}
+    - {name: zoxide, scoop: zoxide, nix: zoxide}
+    - {name: fzf, scoop: fzf, nix: fzf}
+    - {name: ripgrep, scoop: ripgrep, nix: ripgrep}
+    - {name: fd, scoop: fd, nix: fd}
+    - {name: bat, scoop: bat, nix: bat}
+  dev:
+    - {name: rustup, scoop: rustup, nix: rustup}
+    - name: vs-build-tools
+      winget: Microsoft.VisualStudio.2022.BuildTools
+      # The C++ workload rustup's msvc toolchain needs. Asks for admin (UAC) once.
+      winget_override: "--wait --quiet --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+    - {name: typst, scoop: typst, nix: typst}
+    - {name: quarto, scoop: extras/quarto, nix: quarto}
+    - {name: ffmpeg, scoop: ffmpeg, nix: ffmpeg}
+    - {name: 7zip, scoop: 7zip, nix: _7zz}
+  desktop:
+    - {name: VS Code, winget: Microsoft.VisualStudioCode}
+    - {name: Winc, winget: DEEIX-AI.Winc, login: true}
+    - {name: Windows Terminal, winget: Microsoft.WindowsTerminal}
+    - {name: PowerShell 7, winget: Microsoft.PowerShell}
+    - {name: 1Password, winget: AgileBits.1Password, login: true}
+    - {name: Obsidian, winget: Obsidian.Obsidian, login: true}
+    - {name: Telegram, winget: Telegram.TelegramDesktop, login: true}
+    - {name: Tailscale, winget: Tailscale.Tailscale, login: true}
+    # The Microsoft Store build (PowerToys Preview), which is what this desktop has.
+    - {name: PowerToys, winget: XP89DCGQ3K6VLD, winget_source: msstore}
+    - {name: Everything, winget: voidtools.Everything}
+    - {name: NanaZip, winget: M2Team.NanaZip}
+    - {name: T3 Code, winget: T3Tools.T3Code, login: true}
+    - {name: Claude, winget: Anthropic.Claude, login: true}
+    - {name: ChatGPT, winget: OpenAI.ChatGPT, login: true}
+    - {name: Antigravity, winget: Google.Antigravity, login: true}

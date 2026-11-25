@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# Install this machine's CLI and dev packages from .chezmoidata/packages.yaml.
+# Windows: scoop + winget via ~/.local/bin/install-packages.py (GUI apps are left for --desktop).
+# Linux: home-manager switch. Installing Nix itself needs sudo, so it is left to you.
+# Re-runs when the package list or the machine role changes.
+# packages-sha256: {{ .packages | toJson | sha256sum }}
+# role: {{ dig "role" "server" . }}
+
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+HOME = Path({{ .chezmoi.homeDir | quote }})
+ROLE = {{ dig "role" "server" . | quote }}
+
+{{ if eq .chezmoi.os "windows" -}}
+sys.exit(subprocess.run([sys.executable, str(HOME / ".local/bin/install-packages.py")]).returncode)
+{{- else if eq .chezmoi.os "linux" -}}
+FLAKE = f"{HOME / '.config/home-manager'}#default"
+NIX_FALLBACK = Path("/nix/var/nix/profiles/default/bin/nix")
+
+
+def home_manager() -> list[str] | None:
+    if found := shutil.which("home-manager"):
+        return [found]
+    nix = shutil.which("nix") or (str(NIX_FALLBACK) if NIX_FALLBACK.exists() else None)
+    if not nix:
+        return None
+    return [nix, "--extra-experimental-features", "nix-command flakes",
+            "run", "home-manager/master", "--"]
+
+
+command = home_manager()
+if command is None:
+    print("Nix is not installed, so the package list was skipped. Install it (asks for sudo),\n"
+          "open a new shell, then run `chezmoi apply` again:\n"
+          "  curl -fsSL https://install.determinate.systems/nix | sh -s -- install")
+    sys.exit(0)
+subprocess.run([*command, "switch", "--flake", FLAKE], check=True)
+
+if ROLE in ("dev", "desktop") and not shutil.which("cc"):
+    print("No C/C++ compiler found. Rust and C++ builds need one:\n"
+          "  sudo apt install build-essential")
+{{- end }}

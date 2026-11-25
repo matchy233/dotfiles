@@ -1,0 +1,17 @@
+# Managed by chezmoi. Packages live in home.nix, generated from .chezmoidata/packages.yaml.
+{
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = { nixpkgs, home-manager, ... }: {
+    homeConfigurations.default = home-manager.lib.homeManagerConfiguration {
+      pkgs = nixpkgs.legacyPackages.{{ if eq .chezmoi.arch "arm64" }}aarch64-linux{{ else }}x86_64-linux{{ end }};
+      modules = [ ./home.nix ];
+    };
+  };
+}
