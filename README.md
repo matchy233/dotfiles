@@ -6,7 +6,7 @@ Claude Code and Codex to the shared files they need.
 
 ## What Is Managed
 
-- Shell files: `~/.zshrc`, `~/.condarc`, and `~/.dircolors`.
+- Shell files: `~/.zshrc` and `~/.dircolors`.
 - Optional device-local shell overrides that remain outside Git.
 - Shared agent instructions: `~/.agents/AGENTS.md`.
 - Shared and custom skills: `~/.agents/skills/`.
@@ -203,7 +203,6 @@ Mode it falls back to directory junctions. Add new profile directories to
     |-- dot_claude.tesla/         # same links for the T3 Code profile
     |-- dot_codex/                # shared Codex links and modify template
     |-- dot_zshrc
-    |-- dot_condarc
     `-- dot_dircolors
 ```
 

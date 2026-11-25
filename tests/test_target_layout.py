@@ -53,7 +53,6 @@ class TargetLayoutTest(unittest.TestCase):
 
             for relative in [
                 ".zshrc",
-                ".condarc",
                 ".dircolors",
                 ".agents/AGENTS.md",
                 ".agents/codex/config.shared.toml",
@@ -64,6 +63,8 @@ class TargetLayoutTest(unittest.TestCase):
                 ".config/starship.toml",
             ]:
                 self.assertTrue((home / relative).is_file(), relative)
+            # conda is not used; pixi manages scientific packages per project.
+            self.assertFalse((home / ".condarc").exists())
 
             links = {
                 ".codex/AGENTS.md": ".agents/AGENTS.md",
