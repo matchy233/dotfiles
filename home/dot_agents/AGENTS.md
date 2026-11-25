@@ -30,6 +30,10 @@
 - Use bash / PowerShell only for trivial one-liners or shell-specific needs (pipelines, native CLI calls).
 - On Windows, run commands in PowerShell, not Git Bash: Git Bash expands `$VAR` and rewrites `/mnt/c/...` paths before they reach `wsl`. For a WSL script, write it to a file and run `wsl bash <path>`.
 
+## Environment & Boundaries
+
+- Never infer the user's timezone, location or locale from the language they write in. Read it from the machine or ask; if a placeholder is unavoidable, use UTC and say so.
+
 ## Writing Code (ub-mode)
 
 - Before writing or changing code, load the `ub-mode` skill and follow it: First Make it Work, Then Make it Right, Practice. This applies to code in any repo, not only when the user types `/ub-mode`. Config files, docs and one-off shell commands are exempt.
