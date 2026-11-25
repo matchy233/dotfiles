@@ -97,7 +97,10 @@ function cd {
 
 export PATH="$HOME/.local/bin:$PATH"
 
-. "$HOME/.cargo/env"
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+export PATH="$HOME/.cargo/bin:$PATH"  # rustup from nix has no ~/.cargo/env
+
+command -v zoxide >/dev/null && eval "$(zoxide init zsh)"
 
 if [ -d "/mnt/c/Program Files/Sublime Text" ]; then
     export PATH="/mnt/c/Program Files/Sublime Text:$PATH"

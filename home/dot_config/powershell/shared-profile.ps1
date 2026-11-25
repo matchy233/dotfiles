@@ -379,6 +379,10 @@ function Invoke-Starship-PreCommand {
 
 if ($isInteractiveShell) {
     Invoke-Expression (&starship init powershell)
+    # After starship: zoxide wraps the prompt function to record directories.
+    if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+        Invoke-Expression (& { (zoxide init powershell | Out-String) })
+    }
     # Get-ChildItem "$PROFILE\..\Completions\" | ForEach-Object {
     #     . $_.FullName
     # }
