@@ -6,6 +6,7 @@
 # packages-sha256: {{ .packages | toJson | sha256sum }}
 # role: {{ dig "role" "server" . }}
 
+import os
 import shutil
 import subprocess
 import sys
@@ -18,13 +19,17 @@ ROLE = {{ dig "role" "server" . | quote }}
 sys.exit(subprocess.run([sys.executable, str(HOME / ".local/bin/install-packages.py")]).returncode)
 {{- else if eq .chezmoi.os "linux" -}}
 FLAKE = f"{HOME / '.config/home-manager'}#default"
-NIX_FALLBACK = Path("/nix/var/nix/profiles/default/bin/nix")
+NIX_BIN = Path("/nix/var/nix/profiles/default/bin")
+
+# A shell opened before Nix was installed lacks NIX_BIN, and home-manager runs `nix` by name.
+if NIX_BIN.is_dir():
+    os.environ["PATH"] = f"{NIX_BIN}:{os.environ.get('PATH', '')}"
 
 
 def home_manager() -> list[str] | None:
     if found := shutil.which("home-manager"):
         return [found]
-    nix = shutil.which("nix") or (str(NIX_FALLBACK) if NIX_FALLBACK.exists() else None)
+    nix = shutil.which("nix")
     if not nix:
         return None
     return [nix, "--extra-experimental-features", "nix-command flakes",
