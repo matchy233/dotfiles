@@ -101,21 +101,51 @@ pixi run python script.py                            # run inside the environmen
 
 ## Project Structure
 
-When creating a new project, always include:
+First decide what the project is.
+
+### Scripting and data analysis: no package
+
+Scientific computing, bioinformatics and other analysis work produces results,
+not importable software. Do not organize it as a package (no `src/`, no
+package directory, no `[build-system]`).
+
+```
+project/
+├── pixi.toml / pixi.lock   # or uv, if no conda packages are needed
+├── Snakefile               # when the steps form a pipeline
+├── scripts/
+│   ├── build_templates.py  # one step per script
+│   ├── simulate.py
+│   └── common.py           # small shared helpers, imported directly
+├── config/
+└── tests/
+```
+
+- Each script does one step and runs on its own: inputs and outputs are
+  `argparse` arguments, no hard-coded paths, code under
+  `if __name__ == "__main__":`.
+- A workflow (Snakemake) calls the scripts and records the run order.
+- Tool config (ruff, pytest) goes in `ruff.toml` / `pytest.ini`, or in a
+  `pyproject.toml` that holds only `[tool.*]` tables. Tests import scripts via
+  pytest's `pythonpath = ["scripts"]`.
+
+### Software meant to be installed or imported: package at the root
+
+Use the flat layout, with the package directory at the project root. Do not
+use a `src/` directory.
 
 ```
 project/
 ├── pyproject.toml       # project metadata, dependencies, tool config
-├── src/
-│   └── package_name/
-│       ├── __init__.py
-│       └── ...
+├── package_name/
+│   ├── __init__.py
+│   └── ...
 ├── tests/
 │   └── ...
 └── .python-version      # pin Python version (managed by uv)
 ```
 
-## pyproject.toml Template
+## pyproject.toml Template (software projects)
 
 ```toml
 [project]
