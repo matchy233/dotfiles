@@ -13,6 +13,7 @@
 - Check for a git repo at session start. If missing, ask before `git init` — unless the user says git isn't needed.
 - Commit atomically: one logical change per commit, immediately after it's done.
 - Never add `Co-Authored-By` or other AI attribution lines.
+- Keep history linear: rebase or fast-forward; never create merge commits.
 - Match `git log`'s existing style. No history yet? Use **Conventional Commits**:
     ```
     feat: add user authentication module
