@@ -1,6 +1,6 @@
 ---
 name: python
-description: Default Python conventions for tooling (uv, ruff, mamba), type annotations, string formatting, project config, and The Zen of Python. Use when writing Python code in any project. Existing project conventions always take priority over these defaults.
+description: Default Python conventions for tooling (uv, ruff, pixi), type annotations, string formatting, project config, and The Zen of Python. Use when writing Python code in any project. Existing project conventions always take priority over these defaults.
 ---
 
 # Python Project Conventions
@@ -82,14 +82,22 @@ Never use raw `pip install` in projects. Never use `setup.py` — always `pyproj
 
 ## Scientific / Bioinformatics Projects
 
-For scientific computing (biology, data processing, bioinformatics), use **mamba** for environment management:
+When a project needs conda-forge or bioconda packages (bioinformatics tools, R,
+compiled libraries), use **pixi** for its environments. Never use conda, mamba
+or miniforge.
 
 ```bash
-mamba create -n myenv python=3.12
-mamba install numpy pandas biopython
+pixi init --channel conda-forge --channel bioconda   # creates pixi.toml
+pixi add python=3.12 samtools minimap2               # conda packages
+pixi add --pypi some-package                         # PyPI packages
+pixi run python script.py                            # run inside the environment
 ```
 
-Fall back to **conda** only if mamba is unavailable. Even in mamba/conda envs, use `pyproject.toml` for project metadata.
+- Commit `pixi.toml` and `pixi.lock`; the lock file is what makes a run
+  reproducible.
+- Tools with conflicting requirements go in separate named environments
+  (`[feature.<name>]` plus `[environments]`), run with `pixi run -e <name> ...`.
+- Pure-Python projects without conda packages keep using uv.
 
 ## Project Structure
 
