@@ -1,2 +1,5 @@
+export T3CODE_TELEMETRY_ENABLED=false
+export T3CODE_OTEL_SDK_DISABLED=true
+
 export PATH="$HOME/.local/bin:$PATH"
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
