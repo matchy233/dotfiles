@@ -4,6 +4,8 @@
        desktop = base + dev; GUI apps via `install-packages.py --desktop` on Windows */ -}}
 {{- $role := promptChoiceOnce . "role" "Machine role" (list "server" "dev" "desktop") -}}
 encryption = "age"
+# Target modes must not depend on the umask of the shell that runs chezmoi.
+umask = 0o022
 
 [age]
     identity = "~/age-key.txt"
