@@ -28,6 +28,7 @@
 
 - Prefer Python over bash / PowerShell for scripts — avoids symbol-escaping issues (quotes, `$`, backticks).
 - Use bash / PowerShell only for trivial one-liners or shell-specific needs (pipelines, native CLI calls).
+- On Windows, run commands in PowerShell, not Git Bash: Git Bash expands `$VAR` and rewrites `/mnt/c/...` paths before they reach `wsl`. For a WSL script, write it to a file and run `wsl bash <path>`.
 
 ## Writing Code (ub-mode)
 
