@@ -17,10 +17,10 @@
     },
     "correct": {
       "source": "matchy233/skills",
-      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
       "sourceType": "github",
       "skillPath": "skills/correct/SKILL.md",
-      "computedHash": "b2d2e359096fd69971352acb7b5de5512ca6534d8198c5d027eb8669ae7fb8b8",
+      "computedHash": "a83403a159c1c7392c8d08e93a95d034857083e3af24cf92f666312c57a5dc6c",
       "installMode": "copy"
     },
     "find-skills": {
@@ -30,35 +30,36 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "7bc223e2aafbdbf6e50ea243ba6ef67fe432bb069ab439fea0390795dac0bf7f"
     },
-    "grill-me": {
+    "grilling": {
       "source": "mattpocock/skills",
-      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823",
+      "commit": "d65391149dbb5fe76478e76fa8d5122b2aa5a70e",
       "sourceType": "github",
-      "skillPath": "skills/productivity/grill-me/SKILL.md",
-      "computedHash": "ab1acb9fbd9eaee03da254abb8a8de228d1e7a07475fe959da4a5eefa34ea4b9"
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "computedHash": "485451958784497cd4c4dbea13cb5bbb579da58fac0d0e45f3bcb310fab68ac7",
+      "installMode": "copy"
     },
     "reflect": {
       "source": "matchy233/skills",
-      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
       "sourceType": "github",
       "skillPath": "skills/reflect/SKILL.md",
-      "computedHash": "f830cfc99dccbcdceb879eee3ca5b1342f680ef0f650fa445f2336ed492aa369",
+      "computedHash": "780bf7c0e625e4c3ea22b165b16b8bc33a440b8358fedbb3a288c5b7cd52904e",
       "installMode": "copy"
     },
     "reframe": {
       "source": "matchy233/skills",
-      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
       "sourceType": "github",
       "skillPath": "skills/reframe/SKILL.md",
-      "computedHash": "5df65dc59a1dd63eb6787502d191d1ac90c2fc1ca68a82d037ba891941b26567",
+      "computedHash": "ef00142f108c1788e8406e04f4fd38caecf9e3ae799da79075a7785ef9c08205",
       "installMode": "copy"
     },
     "sharpen": {
       "source": "matchy233/skills",
-      "commit": "f5213d429db14fc6cc1b67e8f26c4505a635a799",
+      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
       "sourceType": "github",
       "skillPath": "skills/sharpen/SKILL.md",
-      "computedHash": "85a8e05461d506146669e31feb0218a4d2248ea9716c594309794feea12a1cce",
+      "computedHash": "0e73cf8663b09ec0581cdaef276de6e100bee51cbf37f3b2e5a84c3626c5a1b0",
       "installMode": "copy"
     },
     "skill-creator": {
