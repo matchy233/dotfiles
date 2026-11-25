@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 from typing import Any, Callable, Dict, List, Optional
 
@@ -52,6 +54,14 @@ def _replace_directory(source: Path, target: Path) -> None:
     _remove_path(backup)
 
 
+def _find_npx() -> Optional[str]:
+    path = os.environ.get("PATH", "")
+    if sys.platform != "win32":
+        # WSL appends Windows folders under /mnt; a Windows npx there cannot find a Linux node.
+        path = ":".join(d for d in path.split(":") if not d.startswith("/mnt/"))
+    return shutil.which("npx", path=path)
+
+
 def install_skills(
     home: Path,
     npx_path: Optional[str] = None,
@@ -59,9 +69,10 @@ def install_skills(
 ) -> None:
     lock_path = home / ".agents/skills-lock.json"
     names = _load_skill_names(lock_path)
-    npx = npx_path or shutil.which("npx")
+    npx = npx_path or _find_npx()
     if npx is None:
-        raise SystemExit("npx is required to install agent skills")
+        raise SystemExit("npx is required to install agent skills; run chezmoi apply "
+                         "from a shell that has Node on PATH")
 
     with tempfile.TemporaryDirectory(prefix="agent-skills-") as directory:
         stage = Path(directory)

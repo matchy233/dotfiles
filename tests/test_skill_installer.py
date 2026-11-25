@@ -1,16 +1,19 @@
 import importlib.util
 import json
+import os
 from pathlib import Path
 import shutil
 import sys
 import tempfile
 from types import ModuleType
-from typing import Any, List
+from typing import Any, List, Optional
 import unittest
 from unittest import mock
 
 
-ROOT = Path(__file__).resolve().parents[1]
+# absolute(), not resolve(): mutator runs tests from a worker dir of symlinks, and
+# resolving them would load the real installer instead of the mutated copy.
+ROOT = Path(__file__).absolute().parents[1]
 INSTALLER_PATH = ROOT / "home/dot_agents/install-skills.py"
 
 
@@ -63,6 +66,42 @@ class SkillInstallerTest(unittest.TestCase):
                     installer.install_skills(home)
 
             self.assertFalse((home / ".agents/skills").exists())
+
+    def fake_which(self, command: str, path: Optional[str] = None) -> Any:
+        for directory in (os.environ["PATH"] if path is None else path).split(":"):
+            if directory in {"/mnt/c/scoop/nodejs", "/home/me/.nvs/default/bin"}:
+                return f"{directory}/{command}"
+        return None
+
+    def test_wsl_ignores_windows_npx(self) -> None:
+        installer = load_installer()
+        calls: List[Any] = []
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            self.write_lock(home, [])
+
+            with mock.patch.object(installer.sys, "platform", "linux"), \
+                    mock.patch.object(installer.shutil, "which", self.fake_which), \
+                    mock.patch.dict(installer.os.environ, {
+                        "PATH": "/mnt/c/scoop/nodejs:/home/me/.nvs/default/bin",
+                    }):
+                installer.install_skills(
+                    home, runner=lambda command, **kwargs: calls.append(command)
+                )
+
+        self.assertEqual(calls[0][0], "/home/me/.nvs/default/bin/npx")
+
+    def test_wsl_with_only_windows_npx_exits(self) -> None:
+        installer = load_installer()
+        with tempfile.TemporaryDirectory() as directory:
+            home = Path(directory)
+            self.write_lock(home, ["alpha"])
+
+            with mock.patch.object(installer.sys, "platform", "linux"), \
+                    mock.patch.object(installer.shutil, "which", self.fake_which), \
+                    mock.patch.dict(installer.os.environ, {"PATH": "/mnt/c/scoop/nodejs"}):
+                with self.assertRaisesRegex(SystemExit, "npx"):
+                    installer.install_skills(home)
 
     def test_installs_declared_skills_and_preserves_undeclared(self) -> None:
         installer = load_installer()
