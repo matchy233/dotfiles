@@ -35,6 +35,17 @@
 
 - Never infer the user's timezone, location or locale from the language they write in. Read it from the machine or ask; if a placeholder is unavoidable, use UTC and say so.
 
+## Subagent Model Routing (T3 Code & Paseo)
+
+Keep interactive discussion threads on the user's chosen model (typically Claude Opus 5.5). When delegating subagents or child tasks, route strictly by task type so Claude Opus quota is reserved for UI and design work:
+
+- **UI / frontend implementation** (components, styling, layout, client-side visual polish): `claude-opus-5-5` (`effort: medium`; `high` only for design drafts).
+- **Backend / business logic / scripts / config / tests / mechanical edits**: `codex` (`gpt-6.2-sol`, `reasoningEffort: high` for complex logic, `medium` for scripts/config/tests/glue). Do not spawn Claude Opus subagents for non-UI implementation.
+- **Quick read-only codebase lookups or doc scans**: lightweight/cheap model (`claude-haiku-5-5` or native explore subagent).
+- **Crew runs (`/crew`)**: never run the orchestrator in an Opus discussion thread; hand off to a fresh `claude-sonnet-5-5` (`effort: medium`) thread/agent and settle the discussion thread (unless the user explicitly passes `stay`).
+
+On Paseo, check `list_profiles` first and prefer a matching user profile; never swap providers silently if a target is unavailable.
+
 ## Writing Code (ub-mode)
 
 - Before writing or changing code, load the `ub-mode` skill and follow it: First Make it Work, Then Make it Right, Practice. This applies to code in any repo, not only when the user types `/ub-mode`. Config files, docs and one-off shell commands are exempt.
