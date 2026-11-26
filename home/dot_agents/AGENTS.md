@@ -29,6 +29,7 @@
 - Prefer Python over bash / PowerShell for scripts — avoids symbol-escaping issues (quotes, `$`, backticks).
 - Use bash / PowerShell only for trivial one-liners or shell-specific needs (pipelines, native CLI calls).
 - On Windows, run commands in PowerShell, not Git Bash: Git Bash expands `$VAR` and rewrites `/mnt/c/...` paths before they reach `wsl`. For a WSL script, write it to a file and run `wsl bash <path>`.
+- A toolchain only one repo needs (Go, Node, a compiler) goes in that repo (`flake.nix` devShell or pixi), not in chezmoi `packages.yaml`. Ask before adding anything every machine installs.
 
 ## Environment & Boundaries
 
