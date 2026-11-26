@@ -1,9 +1,16 @@
-{{- /* ub-mode's companion tools: separate repos, not part of the skill install. All platforms. */ -}}
-{{- range list "crapper" "dryer" "mutator" }}
-[".agents/tools/unclebob/{{ . }}"]
+{{- /* ub-mode's companion tools: separate repos, not part of the skill install. All platforms.
+       Sources live in .chezmoidata/ub-tools.yaml. chezmoi reads url and clone.args only on the
+       first clone; run_onchange_after_91-bootstrap-ub-tools moves an existing checkout.
+       A fork branch is rebased onto upstream and force-pushed, so pulls rebase. */ -}}
+{{- range $name, $tool := .ubTools }}
+[".agents/tools/unclebob/{{ $name }}"]
     type = "git-repo"
-    url = "https://github.com/unclebob/{{ . }}.git"
+    url = "https://github.com/{{ $tool.repo }}.git"
     refreshPeriod = "168h"
+{{- if hasKey $tool "branch" }}
+    clone.args = ["--branch", {{ $tool.branch | quote }}]
+{{- end }}
+    pull.args = ["--rebase"]
 {{ end -}}
 {{- /* nvs on Linux is a git checkout; Windows gets it from scoop (.chezmoidata/packages.yaml). */ -}}
 {{- if eq .chezmoi.os "linux" }}

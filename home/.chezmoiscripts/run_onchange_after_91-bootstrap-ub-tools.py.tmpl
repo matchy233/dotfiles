@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-# Build the virtualenvs of the ub-mode companion tools with uv, installing uv first if needed.
-# Works on Linux, macOS and Windows; re-running is a no-op once every tool imports.
+# Point each ub-mode companion tool's checkout at the repo and branch in .chezmoidata/ub-tools.yaml,
+# then build its virtualenv with uv, installing uv first if needed.
+# Works on Linux, macOS and Windows; re-running is a no-op once every tool is in place and imports.
 # externals-sha256: {{ include ".chezmoiexternal.toml.tmpl" | sha256sum }}
 
+import json
 import os
 import shutil
 import subprocess
@@ -17,6 +19,46 @@ UV_INSTALL_DIR = HOME / ".local/bin"  # passed to the installer, so the location
 # Where uv may already live when it is not on PATH (current and older installer defaults).
 UV_DIRS = [UV_INSTALL_DIR, HOME / ".cargo/bin"]
 UV_NAME = "uv.exe" if WINDOWS else "uv"
+SOURCES = json.loads({{ .ubTools | toJson | quote }})
+
+
+def git(tool: Path, *args: str, check: bool = False) -> str:
+    result = subprocess.run(["git", "-C", str(tool), *args], capture_output=True, text=True)
+    if check and result.returncode != 0:
+        raise SystemExit(f"{tool.name}: git {' '.join(args)} failed: {result.stderr.strip()}")
+    return result.stdout.strip() if result.returncode == 0 else ""
+
+
+def default_branch(tool: Path) -> str:
+    git(tool, "remote", "set-head", "origin", "--auto")
+    return git(tool, "symbolic-ref", "--short", "refs/remotes/origin/HEAD").removeprefix("origin/")
+
+
+def has_local_work(tool: Path) -> bool:
+    if git(tool, "status", "--porcelain"):
+        return True
+    return git(tool, "rev-list", "--count", "@{upstream}..HEAD") not in ("", "0")
+
+
+def point_at_source(tool: Path, source: dict) -> None:
+    """chezmoi reads an external's url and clone.args only on the first clone."""
+
+    url = f"https://github.com/{source['repo']}.git"
+    branch = source.get("branch")
+    on_url = git(tool, "remote", "get-url", "origin") == url
+    on_branch = branch is None or git(tool, "rev-parse", "--abbrev-ref", "HEAD") == branch
+    if on_url and on_branch:
+        return
+    if has_local_work(tool):
+        print(f"{tool.name}: local changes or commits; not moving it to {url}")
+        return
+    git(tool, "remote", "set-url", "origin", url, check=True)
+    git(tool, "fetch", "-q", "origin", check=True)
+    target = branch or default_branch(tool)
+    if not target:
+        raise SystemExit(f"{tool.name}: cannot tell the default branch of {url}")
+    git(tool, "checkout", "-q", "-B", target, f"origin/{target}", check=True)
+    print(f"{tool.name}: following {url} ({target})")
 
 
 def locate_uv():
@@ -89,6 +131,8 @@ def main() -> None:
         return
     uv = None
     for tool in tools:
+        if tool.name in SOURCES and (tool / ".git").exists():
+            point_at_source(tool, SOURCES[tool.name])
         if venv_works(tool):
             print(f"{tool.name}: ok")
             continue

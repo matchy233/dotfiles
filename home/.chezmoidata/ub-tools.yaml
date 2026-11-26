@@ -1,0 +1,13 @@
+# ub-mode companion tools, checked out as git-repo externals under ~/.agents/tools/unclebob/.
+# repo: GitHub owner/name to clone. branch: branch to follow (omit for the repo's default branch).
+# mutator and crapper follow the Windows fixes in the user's fork until upstream merges them;
+# the fork's main/master stays a plain mirror of upstream.
+ubTools:
+  crapper:
+    repo: matchy233/crapper
+    branch: windows
+  dryer:
+    repo: unclebob/dryer
+  mutator:
+    repo: matchy233/mutator
+    branch: windows
