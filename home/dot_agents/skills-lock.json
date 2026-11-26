@@ -25,10 +25,10 @@
     },
     "crew": {
       "source": "matchy233/skills",
-      "commit": "1de98bde4600cfcc9bb0fc917884634c74d4626d",
+      "commit": "52335cf09b0fb42da2ea36a19b339d920091b2f0",
       "sourceType": "github",
       "skillPath": "skills/crew/SKILL.md",
-      "computedHash": "8ba2733cdd7025afdded5828a47b04b5e166626e200682c1356af5b3cd72b44d",
+      "computedHash": "4e7cb3924b1d875e32083195970534f2ca3b8875d3519234722d9e95cf329950",
       "installMode": "copy"
     },
     "find-skills": {
