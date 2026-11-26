@@ -40,7 +40,7 @@
 - Before writing or changing code, load the `ub-mode` skill and follow it: First Make it Work, Then Make it Right, Practice. This applies to code in any repo, not only when the user types `/ub-mode`. Config files, docs and one-off shell commands are exempt.
 - Run `crapper`, `dryer` and `mutator` on the changed code when the repo has tests and its language is supported (Clojure, Java, Go, TypeScript, Rust, Python). If you skip a tool, say which and why in the final report.
 - Where ub-mode conflicts with this file, this file wins:
-    - "Commit and Push": commit per Git Workflow below; push only when the user asks, and branch first when on the default branch. Never push straight to the main line.
+    - "Commit and Push": commit per Git Workflow below; push only when the user asks, and branch first when on the default branch.
     - "Keep a Log": the log is `brain/logs/<agent-identity>-YYYY-MM-DD.md`.
 
 ### Tool locations
