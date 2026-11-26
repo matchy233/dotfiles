@@ -29,10 +29,11 @@
     "type": "command",
     "command": "python3 -I ~/.claude/statusline-command.py"
   },
+  "enabledPlugins": {},
   "autoUpdatesChannel": "latest",
   "tui": "default",
-  "theme": "auto",
   "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
   "switchModelsOnFlag": false,
   "agentPushNotifEnabled": true
 }
