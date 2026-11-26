@@ -82,9 +82,10 @@ alias ccconfig='code ~/.claude'
 alias codexconfig='code ~/.codex'
 alias aiconfig='code ~/.agents'
 
-# List the directory contents
+# List the directory contents (only when output goes to a terminal, so agent and script output stays clean)
 function cd {
         builtin cd "$@" || return
+        [[ -t 1 ]] || return 0
         local count=$(ls | wc -l)
         if (( count <= 50 )); then
                 ls -F --color=auto
