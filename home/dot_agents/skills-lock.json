@@ -23,6 +23,14 @@
       "computedHash": "a83403a159c1c7392c8d08e93a95d034857083e3af24cf92f666312c57a5dc6c",
       "installMode": "copy"
     },
+    "crew": {
+      "source": "matchy233/skills",
+      "commit": "1de98bde4600cfcc9bb0fc917884634c74d4626d",
+      "sourceType": "github",
+      "skillPath": "skills/crew/SKILL.md",
+      "computedHash": "8ba2733cdd7025afdded5828a47b04b5e166626e200682c1356af5b3cd72b44d",
+      "installMode": "copy"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "commit": "57217cf86ba38148a57af9e90d14a4c049558330",
