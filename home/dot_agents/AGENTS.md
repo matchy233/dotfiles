@@ -56,7 +56,7 @@ On Paseo, check `list_profiles` first and prefer a matching user profile; never 
 
 ### Tool locations
 
-- `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`.
+- `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`. `.chezmoidata/ub-tools.yaml` names each one's repo and branch: `mutator` and `crapper` follow the `windows` branch of the user's forks (upstream Windows fixes rebased onto unclebob's tree); `dryer` is upstream. Fix tool bugs in a separate checkout of the fork, not in `~/.agents/tools/`.
 - Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (Linux/macOS); on Windows run `~/.agents/tools/unclebob/<tool>/.venv/Scripts/python -m <tool>`. A chezmoi script builds each tool's `.venv` with uv (and installs uv if missing). `mutator` expects `crapper` next to it, which this layout provides.
 
 ## Brain (Code Repos)
