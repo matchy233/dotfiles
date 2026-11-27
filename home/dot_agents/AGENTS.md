@@ -74,7 +74,9 @@ Comments carry the same weight as code: write them when the fact is created, and
 
 ## Tests
 
-Do not write unit tests during development; add them only when the feature is finalized for release. Running existing tests is always allowed.
+- During development, tests written under `tdd` or `ub-mode` are scaffolding that checks the code is complete and working. They are what `crapper`, `dryer` and `mutator` run against. Running existing tests is always allowed.
+- Shipped unit tests have a different purpose: they pin business behavior. Before a feature is integrated and shipped, rewrite them from scratch instead of promoting the scaffolding. They must cover the expected inputs and outputs in real business scenarios, and, once the feature is live, every corner case found later, so fixes and version updates don't break it.
+- Do not add shipped unit tests before the feature is finalized for release.
 
 ## Deliverables
 
