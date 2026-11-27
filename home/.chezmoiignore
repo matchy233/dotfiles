@@ -13,6 +13,7 @@ Documents
 !.config/home-manager/**
 .local/bin/install-packages.py
 .local/bin/install-fonts.py
+.local/share/sounds
 {{- else }}
 .config/home-manager
 {{- end }}

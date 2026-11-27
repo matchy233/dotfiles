@@ -104,6 +104,29 @@ On Windows, both profile entrypoints load the same managed fragment:
 PowerShell 5.1. `Documents/PowerShell/Microsoft.PowerShell_profile.ps1` targets
 PowerShell 7.
 
+## Fonts, Bell Sound, and Windows Terminal
+
+Windows only; WSL reads the fonts from Windows.
+
+- `home/.chezmoidata/fonts.yaml` lists the fonts every machine has, with a
+  pinned URL and SHA-256 for each download. When the list changes,
+  `run_onchange_after_30-install-fonts.py` installs the missing files for the
+  current user. It never replaces an installed font.
+- The Xiaolai Mono Nerd Font is not published upstream, so it is an asset of
+  this repository's `fonts-xiaolai-nerd-3.126` release.
+- The bell sound is `~/.local/share/sounds/Iota +4.5 dB.wav`, stored
+  age-encrypted because the repository is public. Without the age key, Windows
+  Terminal keeps the machine's own bell.
+- `run_after_windows-terminal-settings.py` sets the color scheme, font,
+  opacity, bell, and Shift+Enter on every apply, and removes per-profile
+  overrides of those values. Ubuntu WSL profiles keep the `Ubuntu` scheme
+  unless they name another one. Change shared values in the script; changes made
+  in the Terminal UI are overwritten. To preview:
+
+  ```powershell
+  python home/.chezmoiscripts/run_after_windows-terminal-settings.py --diff
+  ```
+
 ## Daily Workflow
 
 Edit source state, inspect the computed destination, then commit:
