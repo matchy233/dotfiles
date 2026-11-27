@@ -212,6 +212,16 @@ It never touches `synced/` or real directories. On Windows without Developer
 Mode it falls back to directory junctions. Add new profile directories to
 `PROFILE_DIRS` in `home/dot_agents/link-profile-skills.py`.
 
+## Userscripts
+
+Tampermonkey scripts live in `userscripts/`, outside the chezmoi source state.
+Install one by opening its raw URL in a browser that has Tampermonkey:
+
+- [Accent color for Chrome web apps](https://raw.githubusercontent.com/matchy233/dotfiles/main/userscripts/accent-color-web-apps.user.js)
+
+Tampermonkey updates an installed script through its `@updateURL` only when
+`@version` goes up, so raise it with every change.
+
 ## Layout
 
 ```text
@@ -220,6 +230,7 @@ Mode it falls back to directory junctions. Add new profile directories to
 |-- README.md                     # repository documentation, not a target
 |-- setup.sh
 |-- setup.ps1
+|-- userscripts/                  # Tampermonkey scripts, installed by URL
 `-- home/
     |-- dot_agents/               # becomes ~/.agents
     |-- dot_claude/               # shared Claude Code links
