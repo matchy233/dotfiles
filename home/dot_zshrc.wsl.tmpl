@@ -1,29 +1,23 @@
 {{- if eq .chezmoi.os "linux" }}
 {{- if contains "microsoft" (.chezmoi.kernel.osrelease | lower) }}
-{{- /* This machine's Windows profile (%USERPROFILE%) as a WSL path, read when chezmoi renders the
-       file so the shell never calls cmd.exe at startup. Empty when WSL interop is off. */ -}}
-{{- $winHome := output "sh" "-c" `cd /mnt/c 2>/dev/null; p=$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r'); [ -n "$p" ] && wslpath -u "$p" 2>/dev/null || true` | trim }}
 
 # Shared WSL-specific settings
 export WIN_FONT_DIR="/mnt/c/Windows/Fonts"
-{{- if $winHome }}
 
-_win_scoop={{ printf "%s/scoop" $winHome | quote }}
-if [[ -d "$_win_scoop/shims" && ":$PATH:" != *":$_win_scoop/shims:"* ]]; then
+# Scoop under whichever Windows profile has it. Found by glob, so it needs neither a fixed
+# user name nor WSL interop (cmd.exe is missing in an ssh session).
+_win_scoop=(/mnt/c/Users/*/scoop/shims(N/:h))
+_win_scoop=${_win_scoop[1]}
+if [[ -n $_win_scoop && ":$PATH:" != *":$_win_scoop/shims:"* ]]; then
     export PATH="$PATH:$_win_scoop/shims"
 fi
-{{- end }}
 
 if command -v op.exe >/dev/null 2>&1; then
     alias op='op.exe'
-{{- if $winHome }}
-elif [[ -x "$_win_scoop/apps/1password-cli/current/op.exe" ]]; then
+elif [[ -n $_win_scoop && -x "$_win_scoop/apps/1password-cli/current/op.exe" ]]; then
     alias op="$_win_scoop/apps/1password-cli/current/op.exe"
-{{- end }}
 fi
-{{- if $winHome }}
 unset _win_scoop
-{{- end }}
 
 {{- end }}
 {{- end }}
