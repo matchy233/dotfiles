@@ -16,3 +16,5 @@ Documents
 .config/home-manager
 {{- end }}
 .codex/rules/default.rules
+**/__pycache__
+**/__pycache__/**
