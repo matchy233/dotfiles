@@ -46,6 +46,10 @@ def plan(wanted, registered):
     return actions
 
 
+def capture(*command):
+    return subprocess.run(list(command), capture_output=True, text=True, timeout=120)
+
+
 def apply(actions, run):
     for action in actions:
         if action[0] == "add":
@@ -67,13 +71,14 @@ def main():
         return
 
     def run(*args):
-        done = subprocess.run([exe, *args], capture_output=True, text=True, timeout=120)
+        done = capture(exe, *args)
         return done.returncode, done.stderr
 
-    chezmoi = subprocess.run(
-        ["chezmoi", "data", "--format", "json"], capture_output=True, text=True, check=True
-    )
-    listing = subprocess.run([exe, "host", "ls", "--json"], capture_output=True, text=True)
+    chezmoi = capture("chezmoi", "data", "--format", "json")
+    if chezmoi.returncode != 0:
+        print("paseo-hosts: chezmoi data failed, skipping:", chezmoi.stderr.strip())
+        return
+    listing = capture(exe, "host", "ls", "--json")
     if listing.returncode != 0:
         print("paseo-hosts: daemon not reachable, skipping:", listing.stderr.strip())
         return
