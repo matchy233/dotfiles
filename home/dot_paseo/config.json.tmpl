@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "daemon": {
+    "listen": "127.0.0.1:6767{{ with (get (get . "paseo" | default dict) "tailscaleIp") }},{{ . }}:6767{{ end }}",
+    "mcp": {
+      "injectIntoAgents": true
+    },
+    "usage": {
+      "enabled": true
+    },
+    "browserTools": {
+      "enabled": true
+    },
+    "autoArchiveAfterMerge": true,
+    "agentProfiles": [
+      {
+        "id": "t3-opus-tesla",
+        "name": "Opus 5.5 · UI work",
+        "provider": "claude-tesla",
+        "model": "claude-opus-5-5",
+        "modeId": "auto",
+        "thinkingOptionId": "medium",
+        "notes": "T3 default model. Use for UI / frontend implementation: components, styling, layout, client-side visual polish. Also the default for interactive discussion threads."
+      },
+      {
+        "id": "t3-opus-tesla-design",
+        "name": "Opus 5.5 · Design draft",
+        "provider": "claude-tesla",
+        "model": "claude-opus-5-5",
+        "modeId": "auto",
+        "thinkingOptionId": "high",
+        "notes": "Use only for UI design drafts that need deeper thinking. Normal UI implementation uses 'Opus 5.5 · UI work'."
+      },
+      {
+        "id": "t3-codex-sol-high",
+        "name": "Sol · Complex logic",
+        "provider": "codex",
+        "model": "gpt-6.2-sol",
+        "modeId": "full-access",
+        "thinkingOptionId": "high",
+        "notes": "Use for backend / business logic / complex non-UI implementation. Do not use Claude Opus for non-UI implementation."
+      },
+      {
+        "id": "t3-codex-sol-medium",
+        "name": "Sol · Scripts & tests",
+        "provider": "codex",
+        "model": "gpt-6.2-sol",
+        "modeId": "full-access",
+        "thinkingOptionId": "medium",
+        "notes": "Use for scripts, config, tests, glue code and mechanical edits."
+      },
+      {
+        "id": "t3-haiku-lookup",
+        "name": "Haiku 5.5 · Lookup",
+        "provider": "claude-tesla",
+        "model": "claude-haiku-5-5",
+        "modeId": "auto",
+        "thinkingOptionId": "low",
+        "notes": "Use for quick read-only codebase lookups and doc scans. Cheap and fast; do not use for writing code."
+      },
+      {
+        "id": "t3-sonnet-crew",
+        "name": "Sonnet 5.5 · Crew orchestrator",
+        "provider": "claude-tesla",
+        "model": "claude-sonnet-5-5",
+        "modeId": "auto",
+        "thinkingOptionId": "medium",
+        "notes": "Use as the /crew orchestrator thread (never run crew in an Opus discussion thread). Also fine for general everyday tasks."
+      },
+      {
+        "id": "t3-fable-plan",
+        "name": "Fable 5.2 · Planning",
+        "provider": "claude-tesla",
+        "model": "claude-fable-5-2",
+        "modeId": "auto",
+        "thinkingOptionId": "high",
+        "notes": "Use for writing plans, architecture, and splitting work into lanes (crew planner). Most powerful model; use sparingly."
+      },
+      {
+        "id": "t3-opus-personal",
+        "name": "Opus 5.5 · Personal account",
+        "provider": "claude",
+        "model": "claude-opus-5-5",
+        "modeId": "auto",
+        "thinkingOptionId": "medium",
+        "notes": "Same as Opus UI work but on the personal Claude account. Use only when the Tesla account is rate-limited or the user asks."
+      },
+      {
+        "id": "t3-codex-terra",
+        "name": "Terra · Visual / computer use",
+        "provider": "codex",
+        "model": "gpt-6.1-terra",
+        "modeId": "full-access",
+        "thinkingOptionId": "medium",
+        "notes": "Use for tasks needing visual understanding (screenshots) or computer/browser use."
+      },
+      {
+        "id": "t3-codex-luna",
+        "name": "Luna · Easy tasks",
+        "provider": "codex",
+        "model": "gpt-6-luna",
+        "modeId": "auto-review",
+        "thinkingOptionId": "medium",
+        "notes": "Fallback model. Use for easy, cheap tasks or when other quotas are exhausted."
+      }
+    ],
+    "cors": {
+      "allowedOrigins": [
+        "https://app.paseo.sh",
+        "http://localhost:8082"
+      ]
+    },
+    "relay": {
+      "enabled": true
+    }
+  },
+  "app": {
+    "baseUrl": "https://app.paseo.sh"
+  },
+  "pluginsEnabled": true,
+  "plugins": {{- with (get (get . "paseo" | default dict) "t3IrisPath") }}
+  {
+    "t3-iris": { "source": "directory", "path": {{ . | toJson }}, "enabled": true }
+  }
+{{- else }}{}{{ end }},
+  "agents": {
+    "providers": {
+      "claude-tesla": {
+        "extends": "claude",
+        "label": "Claude (Tesla)",
+        "env": {
+          "CLAUDE_CONFIG_DIR": {{ joinPath .chezmoi.homeDir ".claude.tesla" | toJson }}
+        }
+      },
+      "antigravity": {
+        "env": {
+          "AGY_CLI_DISABLE_AUTO_UPDATE": "true"
+        }
+      },
+      "pi": {
+        "enabled": true
+      }
+    }
+  }
+}
