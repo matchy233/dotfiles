@@ -1,4 +1,8 @@
 # Shared Git settings managed by chezmoi. Machine-specific settings
 # (identity, signing, credentials) stay in ~/.gitconfig, which Git reads after this file.
+[core]
+	# Never write CRLF into the working tree. Git for Windows defaults to true, which
+	# leaves mixed-EOL files that show as modified and block `git rebase`.
+	autocrlf = input
 [pull]
 	rebase = true
