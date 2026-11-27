@@ -1,7 +1,6 @@
 # Fonts every Windows machine has; WSL reads them from Windows.
 # ~/.local/bin/install-fonts.py adds the missing files and never replaces one.
 #   files: names under which the font counts as installed (system or user)
-#   satisfied_by: other file names that make the entry unnecessary
 fonts:
   # Windows Terminal's font (run_after_windows-terminal-settings.py).
   - url: "https://github.com/matchy233/dotfiles/releases/download/fonts-xiaolai-nerd-3.126/XiaolaiMonoNerdFont-3.126.ttf"
@@ -13,28 +12,14 @@ fonts:
   - url: "https://github.com/lxgw/kose-font/releases/download/v3.126/XiaolaiMono-Regular.ttf"
     sha256: "802b658db492e02ae5b659f5b56d7d4ef8f77609515bdcc82f462ae912888c33"
     files: ["XiaolaiMono-Regular.ttf"]
-  - url: "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.44/SarasaMonoSC-TTF-1.0.44.7z"
-    sha256: "202e7dc6edf6edc8b289be28784e2b92e4fcff6e77d3df5ffe780073d9abd2d7"
-    files: ["SarasaMonoSC-ExtraLight.ttf", "SarasaMonoSC-ExtraLightItalic.ttf", "SarasaMonoSC-Light.ttf", "SarasaMonoSC-LightItalic.ttf", "SarasaMonoSC-Regular.ttf", "SarasaMonoSC-Italic.ttf", "SarasaMonoSC-SemiBold.ttf", "SarasaMonoSC-SemiBoldItalic.ttf", "SarasaMonoSC-Bold.ttf", "SarasaMonoSC-BoldItalic.ttf"]
-  - url: "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.44/SarasaMonoTC-TTF-1.0.44.7z"
-    sha256: "32869943cb292425d364f02bd738620fc807709b2d19620ec76528ab0ffeaac6"
-    files: ["SarasaMonoTC-ExtraLight.ttf", "SarasaMonoTC-ExtraLightItalic.ttf", "SarasaMonoTC-Light.ttf", "SarasaMonoTC-LightItalic.ttf", "SarasaMonoTC-Regular.ttf", "SarasaMonoTC-Italic.ttf", "SarasaMonoTC-SemiBold.ttf", "SarasaMonoTC-SemiBoldItalic.ttf", "SarasaMonoTC-Bold.ttf", "SarasaMonoTC-BoldItalic.ttf"]
-  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-Regular.ttf"
-    sha256: "b35dd9d2131d5d83a9b87fe9ad22c6288fa3d17688d43302c14da29812417d63"
-    files: ["UbuntuMono-Regular.ttf"]
-    satisfied_by: ["UbuntuMono[wght].ttf"]
-  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-Italic.ttf"
-    sha256: "960b2bc286c2ff7d49073303858c65e1fc9013c17a971b61123b02c39454ef75"
-    files: ["UbuntuMono-Italic.ttf"]
-    satisfied_by: ["UbuntuMono[wght].ttf"]
-  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-Bold.ttf"
-    sha256: "11f15c3a6bbd998a8695fdefb3475931c3789aa035d7546f2efe78e83b352f6b"
-    files: ["UbuntuMono-Bold.ttf"]
-    satisfied_by: ["UbuntuMono[wght].ttf"]
-  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-BoldItalic.ttf"
-    sha256: "bd255784bb87b5c41513a12a86f0f9cf061bce4e8256d3bfe7234611002e8f48"
-    files: ["UbuntuMono-BoldItalic.ttf"]
-    satisfied_by: ["UbuntuMono[wght].ttf"]
+  # Every Sarasa family and region (CL, SC, TC, HC, J, K) in TTC collections.
+  - url: "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.44/Sarasa-TTC-1.0.44.7z"
+    sha256: "39db5a49a5917e6f2534e90d0316566599fcdacb2eaf06687e10f5aa64e77d8c"
+    files: ["Sarasa-ExtraLight.ttc", "Sarasa-ExtraLightItalic.ttc", "Sarasa-Light.ttc", "Sarasa-LightItalic.ttc", "Sarasa-Regular.ttc", "Sarasa-Italic.ttc", "Sarasa-SemiBold.ttc", "Sarasa-SemiBoldItalic.ttc", "Sarasa-Bold.ttc", "Sarasa-BoldItalic.ttc"]
+  # The variable build WSL's Ubuntu setup also installs.
+  - url: "https://launchpad.net/ubuntu/+archive/primary/+files/fonts-ubuntu_0.869+git20240321-0ubuntu2_all.deb"
+    sha256: "f406a58d53ba6f1b7d0c8b9641ee599181cfaaf433c4fd1276a7fe2f10ae9e38"
+    files: ["UbuntuMono[wght].ttf", "UbuntuMono-Italic[wght].ttf"]
   - url: "https://raw.githubusercontent.com/adobe-fonts/source-han-sans/2.005R/Variable/OTF/SourceHanSansSC-VF.otf"
     sha256: "e4fb7711890d8237bd2dfbbcf14f2fd26c2c5cedb29a44fcc60bef1447690422"
     files: ["SourceHanSansSC-VF.otf"]

@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import tarfile
 import tempfile
 import unittest
 from unittest import mock
@@ -14,6 +15,14 @@ from tests.script_loading import load_script
 
 ROOT = Path(__file__).absolute().parents[1]
 SCRIPT = ROOT / "home/dot_local/bin/install-fonts.py"
+
+
+def ar_archive(members: dict[str, bytes]) -> bytes:
+    output = b"!<arch>\n"
+    for name, content in members.items():
+        header = f"{name:<16}{0:<12}{0:<6}{0:<6}{'100644':<8}{len(content):<10}`\n"
+        output += header.encode() + content + b"\n" * (len(content) % 2)
+    return output
 
 
 class FontInstallerTest(unittest.TestCase):
@@ -64,17 +73,13 @@ class FontInstallerTest(unittest.TestCase):
 
     def test_installed_fonts_are_not_downloaded_again(self) -> None:
         (self.system_fonts / "System.TTF").write_bytes(b"older build")
-        entries = [
-            {"url": "file:///does/not/exist", "sha256": "0", "files": ["system.ttf"]},
-            {
-                "url": "file:///does/not/exist",
-                "sha256": "0",
-                "files": ["static.ttf"],
-                "satisfied_by": ["System.ttf"],
-            },
-        ]
+        entry = {
+            "url": "file:///does/not/exist",
+            "sha256": "0",
+            "files": ["system.ttf"],
+        }
 
-        self.assertEqual(self.install(entries), [])
+        self.assertEqual(self.install([entry]), [])
 
     def test_wrong_hash_installs_nothing(self) -> None:
         entry = self.entry("asset.ttf", b"glyphs", ["a.ttf"])
@@ -94,6 +99,22 @@ class FontInstallerTest(unittest.TestCase):
         ]
 
         self.assertEqual(self.install(entries), ["a.ttf", "b.ttf"])
+
+    @unittest.skipUnless(os.name == "nt", "archives are extracted with Windows tar.exe")
+    def test_font_is_taken_from_a_debian_package(self) -> None:
+        data = io.BytesIO()
+        with tarfile.open(fileobj=data, mode="w:gz") as inner:
+            member = tarfile.TarInfo("usr/share/fonts/Mono[wght].ttf")
+            member.size = len(b"glyphs")
+            inner.addfile(member, io.BytesIO(b"glyphs"))
+        package = ar_archive(
+            {"debian-binary": b"2.0\n", "data.tar.gz": data.getvalue()}
+        )
+        entry = self.entry("fonts.deb", package, ["Mono[wght].ttf"])
+
+        self.assertEqual(self.install([entry]), ["Mono[wght].ttf"])
+
+        self.assertEqual((self.user_fonts / "Mono[wght].ttf").read_bytes(), b"glyphs")
 
     @unittest.skipUnless(os.name == "nt", "archives are extracted with Windows tar.exe")
     def test_broken_archive_stops_the_install(self) -> None:

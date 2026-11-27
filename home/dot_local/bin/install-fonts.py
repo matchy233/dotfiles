@@ -18,15 +18,13 @@ from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import urlsplit
 
-ARCHIVE_SUFFIXES = (".7z", ".zip")
+ARCHIVE_SUFFIXES = (".7z", ".zip", ".deb")
 REGISTRY_KEY = r"Software\Microsoft\Windows NT\CurrentVersion\Fonts"
 # ALL APPLICATION PACKAGES and ALL RESTRICTED APPLICATION PACKAGES.
 PACKAGED_APP_SIDS = ("*S-1-15-2-1", "*S-1-15-2-2")
 
 
 def missing_files(font: dict, present: set[str]) -> list[str]:
-    if any(name.lower() in present for name in font.get("satisfied_by", [])):
-        return []
     return [name for name in font["files"] if name.lower() not in present]
 
 
@@ -41,6 +39,13 @@ def download(url: str, sha256: str, destination: Path) -> None:
         raise ValueError(f"sha256 mismatch for {url}: got {actual}")
 
 
+def extract(archive: Path, destination: Path) -> None:
+    destination.mkdir(exist_ok=True)
+    # Windows' bsdtar reads 7z, zip and deb; a GNU tar earlier on PATH does not.
+    tar = Path(os.environ["SystemRoot"]) / "System32/tar.exe"
+    subprocess.run([tar, "-xf", archive, "-C", destination], check=True)
+
+
 def fetch(font: dict, names: list[str], workdir: Path) -> dict[str, Path]:
     suffix = Path(urlsplit(font["url"]).path).suffix.lower()
     payload = workdir / f"download{suffix}"
@@ -49,10 +54,10 @@ def fetch(font: dict, names: list[str], workdir: Path) -> dict[str, Path]:
         return {names[0]: payload}
 
     extracted = workdir / "extracted"
-    extracted.mkdir()
-    # Windows' bsdtar reads 7z and zip; a GNU tar earlier on PATH reads neither.
-    tar = Path(os.environ["SystemRoot"]) / "System32/tar.exe"
-    subprocess.run([tar, "-xf", payload, "-C", extracted], check=True)
+    extract(payload, extracted)
+    # A .deb is an ar archive that holds its files in a second, inner tarball.
+    for inner in extracted.glob("data.tar.*"):
+        extract(inner, extracted)
     found = {path.name: path for path in extracted.rglob("*") if path.is_file()}
     return {name: found[name] for name in names}
 
