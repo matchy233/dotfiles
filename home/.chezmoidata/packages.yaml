@@ -45,7 +45,9 @@ packages:
     - {name: VS Code, winget: Microsoft.VisualStudioCode}
     - {name: Winc, winget: DEEIX-AI.Winc, login: true}
     - {name: Windows Terminal, winget: Microsoft.WindowsTerminal}
-    - {name: PowerShell 7, winget: Microsoft.PowerShell}
+    # winget's default installer for this id is MSIX, which lives under WindowsApps with a
+    # versioned path that sshd (DefaultShell) cannot start. wix is the MSI: C:\Program Files\PowerShell\7\pwsh.exe.
+    - {name: PowerShell 7, winget: Microsoft.PowerShell, winget_installer_type: wix}
     - {name: 1Password, winget: AgileBits.1Password, login: true}
     - {name: Obsidian, winget: Obsidian.Obsidian, login: true}
     - {name: Telegram, winget: Telegram.TelegramDesktop, login: true}

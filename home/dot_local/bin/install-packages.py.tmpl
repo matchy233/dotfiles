@@ -71,6 +71,8 @@ def install_winget(entries: list[dict], dry_run: bool) -> tuple[list[str], list[
         command = ["winget", "install", "--id", entry["winget"], *WINGET_FLAGS]
         if entry.get("winget_source"):
             command += ["--source", entry["winget_source"]]
+        if entry.get("winget_installer_type"):
+            command += ["--installer-type", entry["winget_installer_type"]]
         if entry.get("winget_override"):
             command += ["--override", entry["winget_override"]]
         (installed if run(command, dry_run) else failed).append(entry["name"])
