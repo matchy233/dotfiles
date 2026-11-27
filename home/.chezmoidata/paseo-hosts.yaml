@@ -1,0 +1,38 @@
+# Paseo remote hosts every device registers with `paseo host add` (see .chezmoiscripts/run_after_92-register-paseo-hosts.py.tmpl).
+# label: registration key; a host whose label is already registered is skipped, so renaming adds a new entry.
+# connection: Paseo SSH connection string.
+# tailnet: true marks a device inside the tailnet. A device registers the tailnet entries only when it is
+#   itself one (machine + os match its chezmoi hostname and OS); it never registers itself. Entries without
+#   tailnet are registered everywhere.
+# machine: lowercase hostname of the device running that daemon. WSL shares the Windows hostname, so os
+#   (windows or linux) tells the two apart.
+paseoHosts:
+  - label: server-a
+    connection: ssh://user@alpha
+  - label: server-b
+    connection: ssh://user@beta
+  - label: GAMMA-PC
+    connection: ssh://user@gamma-host
+    tailnet: true
+    machine: gamma-pc
+    os: windows
+  - label: desk-pc
+    connection: ssh://user@100.64.0.2
+    tailnet: true
+    machine: desk-pc
+    os: windows
+  - label: desk-pc WSL
+    connection: ssh://user@100.64.0.2?daemonPort=7000
+    tailnet: true
+    machine: desk-pc
+    os: linux
+  - label: laptop-pc
+    connection: ssh://user@100.64.0.3
+    tailnet: true
+    machine: laptop-pc
+    os: windows
+  - label: laptop-pc WSL
+    connection: ssh://user@100.64.0.3?daemonPort=7000
+    tailnet: true
+    machine: laptop-pc
+    os: linux
