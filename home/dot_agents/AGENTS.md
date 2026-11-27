@@ -11,7 +11,8 @@
 ## Git Workflow
 
 - Check for a git repo at session start. If missing, ask before `git init` — unless the user says git isn't needed.
-- Commit atomically: one logical change per commit, immediately after it's done.
+- Commit atomically: one logical change per commit, immediately after it's done. One intent each, structural and behavioral changes in separate commits, each commit buildable and revertible on its own.
+- The message states what changed and why, with the background a future reader cannot recover from the diff.
 - Never add `Co-Authored-By` or other AI attribution lines.
 - Keep history linear: rebase or fast-forward; never create merge commits.
 - Match `git log`'s existing style. No history yet? Use **Conventional Commits**:
@@ -58,6 +59,26 @@ On Paseo, check `list_profiles` first and prefer a matching user profile; never 
 
 - `crapper`, `dryer` and `mutator` are not part of the `ub-mode` skill install; chezmoi checks them out as git-repo externals at `~/.agents/tools/unclebob/<tool>/`. `.chezmoidata/ub-tools.yaml` names each one's repo and branch: `mutator` and `crapper` follow the `windows` branch of the user's forks (upstream Windows fixes rebased onto unclebob's tree); `dryer` is upstream. Fix tool bugs in a separate checkout of the fork, not in `~/.agents/tools/`.
 - Run `~/.agents/tools/unclebob/<tool>/<tool>` from a project root (Linux/macOS); on Windows run `~/.agents/tools/unclebob/<tool>/.venv/Scripts/python -m <tool>`. A chezmoi script builds each tool's `.venv` with uv (and installs uv if missing). `mutator` expects `crapper` next to it, which this layout provides.
+
+## Code Comments
+
+Default: no new inline comments (docstrings count as comments). Add one only when a future editor needs a verified fact that is hard to infer from the code, and only for one of these:
+
+- a contract or invariant a refactor or cleanup must not break, including external constraints, required ordering, and non-obvious traps;
+- a pointer out of the code: a sync tag for code that must change together, or a link to the issue, spec, or ADR behind a decision;
+- a durable why that would otherwise be lost, including a rejected alternative, in one line.
+
+Never restate what the code does, describe a plan instead of the result, or invent a rationale. Put conventions in AGENTS.md; put anything enforceable in types, tests, or lint, not in a comment.
+
+Comments carry the same weight as code: write them when the fact is created, and update or delete them in the same change as the code they describe.
+
+## Tests
+
+Do not write unit tests during development; add them only when the feature is finalized for release. Running existing tests is always allowed.
+
+## Deliverables
+
+Write every deliverable as a self-contained final-state artifact. Fold feedback into the final wording; do not mention drafts, versions, review rounds, or superseded decisions unless a changelog or decision record is explicitly requested.
 
 ## Brain (Code Repos)
 
