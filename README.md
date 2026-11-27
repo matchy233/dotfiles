@@ -127,6 +127,20 @@ Windows only; WSL reads the fonts from Windows.
   python home/.chezmoiscripts/run_after_windows-terminal-settings.py --diff
   ```
 
+## Windows Appearance
+
+On every apply, `run_after_windows-appearance.py` sets dark mode, transparency,
+the accent color `#A67DF2`, and shows the accent on title bars but not on Start
+or the taskbar. Wallpaper, cursors, and sounds stay per machine. Changes to the
+managed values made in Settings are overwritten.
+
+Windows derives several shades from an accent color. To change it, choose the new
+color in Settings, then copy the values listed by `--diff` into the script:
+
+```powershell
+python home/.chezmoiscripts/run_after_windows-appearance.py --diff
+```
+
 ## Daily Workflow
 
 Edit source state, inspect the computed destination, then commit:
