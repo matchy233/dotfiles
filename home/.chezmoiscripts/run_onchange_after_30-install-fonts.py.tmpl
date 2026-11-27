@@ -1,0 +1,15 @@
+{{ if eq .chezmoi.os "windows" -}}
+#!/usr/bin/env python3
+# Install the fonts in .chezmoidata/fonts.yaml that this machine lacks.
+# Re-runs when the font list changes.
+# fonts-sha256: {{ .fonts | toJson | sha256sum }}
+
+import subprocess
+import sys
+from pathlib import Path
+
+SCRIPT = Path({{ .chezmoi.homeDir | quote }}) / ".local/bin/install-fonts.py"
+FONTS = {{ .fonts | toJson | quote }}
+
+sys.exit(subprocess.run([sys.executable, str(SCRIPT)], input=FONTS, text=True).returncode)
+{{- end }}

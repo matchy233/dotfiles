@@ -1,0 +1,52 @@
+# Fonts every Windows machine has; WSL reads them from Windows.
+# ~/.local/bin/install-fonts.py adds the missing files and never replaces one.
+#   files: names under which the font counts as installed (system or user)
+#   satisfied_by: other file names that make the entry unnecessary
+fonts:
+  # Windows Terminal's font (run_after_windows-terminal-settings.py).
+  - url: "https://github.com/matchy233/dotfiles/releases/download/fonts-xiaolai-nerd-3.126/XiaolaiMonoNerdFont-3.126.ttf"
+    sha256: "4e7cb7bb7a52ac54fc998d8dcbfc104b33ea16a17c4246569cdf1d880c8c31e1"
+    files: ["Xiaolai Mono Nerd Font.ttf"]
+  - url: "https://github.com/lxgw/kose-font/releases/download/v3.126/Xiaolai-Regular.ttf"
+    sha256: "e2f68daf0e72777a8cf58bc83de1b98634b251e537ddbfca24b0ae50d1802da2"
+    files: ["Xiaolai-Regular.ttf"]
+  - url: "https://github.com/lxgw/kose-font/releases/download/v3.126/XiaolaiMono-Regular.ttf"
+    sha256: "802b658db492e02ae5b659f5b56d7d4ef8f77609515bdcc82f462ae912888c33"
+    files: ["XiaolaiMono-Regular.ttf"]
+  - url: "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.44/SarasaMonoSC-TTF-1.0.44.7z"
+    sha256: "202e7dc6edf6edc8b289be28784e2b92e4fcff6e77d3df5ffe780073d9abd2d7"
+    files: ["SarasaMonoSC-ExtraLight.ttf", "SarasaMonoSC-ExtraLightItalic.ttf", "SarasaMonoSC-Light.ttf", "SarasaMonoSC-LightItalic.ttf", "SarasaMonoSC-Regular.ttf", "SarasaMonoSC-Italic.ttf", "SarasaMonoSC-SemiBold.ttf", "SarasaMonoSC-SemiBoldItalic.ttf", "SarasaMonoSC-Bold.ttf", "SarasaMonoSC-BoldItalic.ttf"]
+  - url: "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.44/SarasaMonoTC-TTF-1.0.44.7z"
+    sha256: "32869943cb292425d364f02bd738620fc807709b2d19620ec76528ab0ffeaac6"
+    files: ["SarasaMonoTC-ExtraLight.ttf", "SarasaMonoTC-ExtraLightItalic.ttf", "SarasaMonoTC-Light.ttf", "SarasaMonoTC-LightItalic.ttf", "SarasaMonoTC-Regular.ttf", "SarasaMonoTC-Italic.ttf", "SarasaMonoTC-SemiBold.ttf", "SarasaMonoTC-SemiBoldItalic.ttf", "SarasaMonoTC-Bold.ttf", "SarasaMonoTC-BoldItalic.ttf"]
+  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-Regular.ttf"
+    sha256: "b35dd9d2131d5d83a9b87fe9ad22c6288fa3d17688d43302c14da29812417d63"
+    files: ["UbuntuMono-Regular.ttf"]
+    satisfied_by: ["UbuntuMono[wght].ttf"]
+  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-Italic.ttf"
+    sha256: "960b2bc286c2ff7d49073303858c65e1fc9013c17a971b61123b02c39454ef75"
+    files: ["UbuntuMono-Italic.ttf"]
+    satisfied_by: ["UbuntuMono[wght].ttf"]
+  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-Bold.ttf"
+    sha256: "11f15c3a6bbd998a8695fdefb3475931c3789aa035d7546f2efe78e83b352f6b"
+    files: ["UbuntuMono-Bold.ttf"]
+    satisfied_by: ["UbuntuMono[wght].ttf"]
+  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ufl/ubuntumono/UbuntuMono-BoldItalic.ttf"
+    sha256: "bd255784bb87b5c41513a12a86f0f9cf061bce4e8256d3bfe7234611002e8f48"
+    files: ["UbuntuMono-BoldItalic.ttf"]
+    satisfied_by: ["UbuntuMono[wght].ttf"]
+  - url: "https://raw.githubusercontent.com/adobe-fonts/source-han-sans/2.005R/Variable/OTF/SourceHanSansSC-VF.otf"
+    sha256: "e4fb7711890d8237bd2dfbbcf14f2fd26c2c5cedb29a44fcc60bef1447690422"
+    files: ["SourceHanSansSC-VF.otf"]
+  - url: "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/2.003R/OTF/SimplifiedChinese/SourceHanSerifSC-Regular.otf"
+    sha256: "78aa7a328fd974df2d688c8a9fd74a33d8334dfa84ab24d9d11efb2ffc464117"
+    files: ["SourceHanSerifSC-Regular.otf"]
+  - url: "https://raw.githubusercontent.com/adobe-fonts/source-han-serif/2.003R/OTF/SimplifiedChinese/SourceHanSerifSC-Bold.otf"
+    sha256: "706b8c0de2deff6cbc0c87e2cdedfd33a78b7ffd76cebb4549012f197ba611fe"
+    files: ["SourceHanSerifSC-Bold.otf"]
+  - url: "https://raw.githubusercontent.com/google/fonts/5026800714d07231937d92eb4cceabf06e05d74e/ofl/inter/Inter%5Bopsz%2Cwght%5D.ttf"
+    sha256: "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+    files: ["Inter-Variable.ttf"]
+  - url: "https://practicaltypography.com/fonts/Charter%20210112.zip"
+    sha256: "b40297f1a615f94594bdad0995848eb2223fb53ccb4ea197cabf24439bd811c9"
+    files: ["Charter Regular.ttf", "Charter Italic.ttf", "Charter Bold.ttf", "Charter Bold Italic.ttf"]

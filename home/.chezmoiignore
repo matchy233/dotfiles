@@ -12,6 +12,7 @@ Documents
 !.config/home-manager
 !.config/home-manager/**
 .local/bin/install-packages.py
+.local/bin/install-fonts.py
 {{- else }}
 .config/home-manager
 {{- end }}
