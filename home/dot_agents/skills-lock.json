@@ -3,21 +3,21 @@
   "skills": {
     "caveman-commit": {
       "source": "juliusbrussee/caveman",
-      "commit": "a192894723a8f47e7f504c7b5041967ff1f18e55",
+      "commit": "e74a11ccdb38b98d15c9f9545787c907dd15f0ab",
       "sourceType": "github",
       "skillPath": "skills/caveman-commit/SKILL.md",
       "computedHash": "2c1472fb59eedd3cfba0b6512dc470a00287343ade421db55c21a6fb52afbe86"
     },
     "chezmoi": {
       "source": "matchy233/skills",
-      "commit": "bc670982263222dd0b0149859a604c3a34a4fa80",
+      "commit": "5b55fbd63903b140cbf0a895fe44870aeade5014",
       "sourceType": "github",
       "skillPath": "skills/chezmoi/SKILL.md",
       "computedHash": "5594003e9afed27f59ddd060e3b8072436190f7070952a0af28525c101852f74"
     },
     "correct": {
       "source": "matchy233/skills",
-      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
+      "commit": "5b55fbd63903b140cbf0a895fe44870aeade5014",
       "sourceType": "github",
       "skillPath": "skills/correct/SKILL.md",
       "computedHash": "a83403a159c1c7392c8d08e93a95d034857083e3af24cf92f666312c57a5dc6c",
@@ -33,14 +33,14 @@
     },
     "find-skills": {
       "source": "vercel-labs/skills",
-      "commit": "57217cf86ba38148a57af9e90d14a4c049558330",
+      "commit": "e7fd0e9e52f029fe87729d8185cb8caf7049f678",
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "7bc223e2aafbdbf6e50ea243ba6ef67fe432bb069ab439fea0390795dac0bf7f"
     },
     "grilling": {
       "source": "mattpocock/skills",
-      "commit": "d65391149dbb5fe76478e76fa8d5122b2aa5a70e",
+      "commit": "6f7f7831a625f040a8e06a0e7954826b87ce775a",
       "sourceType": "github",
       "skillPath": "skills/productivity/grilling/SKILL.md",
       "computedHash": "485451958784497cd4c4dbea13cb5bbb579da58fac0d0e45f3bcb310fab68ac7",
@@ -48,7 +48,7 @@
     },
     "reflect": {
       "source": "matchy233/skills",
-      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
+      "commit": "5b55fbd63903b140cbf0a895fe44870aeade5014",
       "sourceType": "github",
       "skillPath": "skills/reflect/SKILL.md",
       "computedHash": "780bf7c0e625e4c3ea22b165b16b8bc33a440b8358fedbb3a288c5b7cd52904e",
@@ -56,7 +56,7 @@
     },
     "reframe": {
       "source": "matchy233/skills",
-      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
+      "commit": "5b55fbd63903b140cbf0a895fe44870aeade5014",
       "sourceType": "github",
       "skillPath": "skills/reframe/SKILL.md",
       "computedHash": "ef00142f108c1788e8406e04f4fd38caecf9e3ae799da79075a7785ef9c08205",
@@ -64,7 +64,7 @@
     },
     "sharpen": {
       "source": "matchy233/skills",
-      "commit": "b63637334b260e77b377b07df936cdeb48cb6947",
+      "commit": "5b55fbd63903b140cbf0a895fe44870aeade5014",
       "sourceType": "github",
       "skillPath": "skills/sharpen/SKILL.md",
       "computedHash": "0e73cf8663b09ec0581cdaef276de6e100bee51cbf37f3b2e5a84c3626c5a1b0",
@@ -79,7 +79,7 @@
     },
     "tdd": {
       "source": "mattpocock/skills",
-      "commit": "abeeaf95660ba9e8b7c753eb38f441ca707a8823",
+      "commit": "6f7f7831a625f040a8e06a0e7954826b87ce775a",
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
       "computedHash": "e3e0f78ff1c2d52ffefa0378baa1e80e129d359288cf9a56f4e59afcd2aac86c"
