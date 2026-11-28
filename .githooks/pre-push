@@ -1,0 +1,6 @@
+#!/bin/sh
+python=$(command -v python3 || command -v python) || {
+    echo "pre-push: Python is required to check what would be published" >&2
+    exit 1
+}
+exec "$python" -B "$(dirname "$0")/check_publish.py" "$@"

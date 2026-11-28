@@ -164,6 +164,15 @@ Each `paseoHosts` entry has:
 
 `privateNames` lists further names the pre-push check must keep out of commits.
 
+## Publish Check
+
+This repository is public. `.githooks/pre-push` refuses a push whose unpublished
+commits add a device name, an ssh login or a tailnet address to a file, a file
+name or a commit message. It takes the names from the encrypted Paseo host list
+(including `privateNames`), `~/.ssh` and the local hostname, and refuses the push
+when it cannot read them. Every apply turns it on for the chezmoi clone. In tests,
+use made-up names and addresses from `100.64.0.0/24`.
+
 ## Daily Workflow
 
 Edit source state, inspect the computed destination, then commit:
