@@ -128,6 +128,14 @@ class RenderedFilesTest(unittest.TestCase):
 
         self.assertIn("ListenStream=\nListenStream=127.0.0.1:2222", text)
 
+    def test_socket_activation_drops_the_sshd_dropin_before_restarting(self):
+        text = self.script.provision_script(2222, ["127.0.0.1"], "alice", KEY)
+        socket_branch = text.split("\nelse\n")[0]
+        removal = f"rm -f {self.script.SSHD_DROPIN}\n"
+
+        self.assertIn(removal, socket_branch)
+        self.assertLess(socket_branch.index(removal), socket_branch.index("systemctl restart ssh.socket"))
+
 
 class MainTest(unittest.TestCase):
     def setUp(self):

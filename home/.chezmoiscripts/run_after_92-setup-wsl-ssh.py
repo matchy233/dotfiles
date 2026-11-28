@@ -43,6 +43,7 @@ if [ "$(systemctl is-enabled ssh.socket 2>/dev/null || true)" = enabled ]; then
 ListenStream=
 @STREAMS@FreeBind=true
 EOF_SOCKET
+  rm -f @SSHD_DROPIN@
   systemctl daemon-reload
   systemctl restart ssh.socket
 else
