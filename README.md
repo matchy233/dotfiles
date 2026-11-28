@@ -161,8 +161,18 @@ Each `paseoHosts` entry has:
   registers the other tailnet entries and never itself; `machine` is its lowercase
   hostname, and `os` tells Windows from WSL. Entries without `tailnet` are
   registered everywhere.
+- `chezmoi`: marks a device that `scripts/sync-hosts.py` pulls and applies. It
+  needs `machine` and `os`, and the sync connects with `connection` unless the
+  entry is the device running it.
 
 `privateNames` lists further names the pre-push check must keep out of commits.
+
+## Sync All Devices
+
+`python scripts/sync-hosts.py` pulls and applies on every host marked `chezmoi`,
+in parallel and without prompts. It applies files only: when a script or external
+changed, run `chezmoi apply` on that device. A device with local edits to a
+managed file reports a failure and keeps them.
 
 ## Publish Check
 
