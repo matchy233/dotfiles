@@ -10,7 +10,7 @@ from tests.script_loading import load_script
 
 
 ROOT = Path(__file__).absolute().parents[1]
-SCRIPT = ROOT / "home/.chezmoiscripts/run_after_92-register-paseo-hosts.py"
+SCRIPT = ROOT / "home/.chezmoiscripts/run_after_93-register-paseo-hosts.py"
 
 HOSTS = [
     {"label": "alpha", "connection": "ssh://user@alpha"},

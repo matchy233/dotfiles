@@ -1,6 +1,8 @@
-# Paseo remote hosts every device registers (see .chezmoiscripts/run_after_92-register-paseo-hosts.py).
+# Paseo remote hosts every device registers (see .chezmoiscripts/run_after_93-register-paseo-hosts.py).
 # label: registration key. The script renames a registration that still carries a formerLabels entry.
-# connection: Paseo SSH connection string. Hosts are reached through the aliases in ~/.ssh/config.
+# connection: Paseo SSH connection string. Hosts are reached through the aliases in ~/.ssh/config;
+#   a WSL alias is <hostname>-wsl-<distro>, and its local copy in ~/.ssh/config.wsl is written by
+#   .chezmoiscripts/run_after_92-setup-wsl-ssh.py.
 # tailnet: true marks a device inside the tailnet. A device registers the tailnet entries only when it is
 #   itself one (machine + os match its chezmoi hostname and OS); it never registers itself. Entries without
 #   tailnet are registered everywhere.
@@ -22,9 +24,9 @@ paseoHosts:
     tailnet: true
     machine: desk-pc
     os: windows
-  - label: desk-pc-wsl
-    connection: ssh://user@desk-pc-wsl?daemonPort=7000
-    formerLabels: [desk-pc WSL]
+  - label: desk-pc-wsl-ubuntu-26.04
+    connection: ssh://user@desk-pc-wsl-ubuntu-26.04?daemonPort=7000
+    formerLabels: [desk-pc-wsl, desk-pc WSL]
     tailnet: true
     machine: desk-pc
     os: linux
@@ -33,9 +35,9 @@ paseoHosts:
     tailnet: true
     machine: laptop-pc
     os: windows
-  - label: laptop-pc-wsl
-    connection: ssh://user@laptop-pc-wsl?daemonPort=7000
-    formerLabels: [laptop-pc WSL]
+  - label: laptop-pc-wsl-ubuntu-26.04
+    connection: ssh://user@laptop-pc-wsl-ubuntu-26.04?daemonPort=7000
+    formerLabels: [laptop-pc-wsl, laptop-pc WSL]
     tailnet: true
     machine: laptop-pc
     os: linux
