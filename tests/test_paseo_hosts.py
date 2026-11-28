@@ -120,19 +120,20 @@ class StoredConnectionTest(unittest.TestCase):
 
 
 class MainTest(unittest.TestCase):
-    CHEZMOI = {
-        "chezmoi": {"hostname": "laptop", "os": "linux"},
-        "paseoHosts": [HOSTS[0]],
-    }
+    CHEZMOI = {"chezmoi": {"hostname": "laptop", "os": "linux", "sourceDir": "/src/home"}}
 
     def setUp(self):
         self.script = load_script(SCRIPT)
         self.calls = []
         self.chezmoi_code = 0
+        self.decrypt_code = 0
 
     def fake_run(self, listing_code, listing, args, **kwargs):
         self.assertTrue(kwargs.get("capture_output") and kwargs.get("text"))
         self.calls.append(args[1:] if args[0].endswith("paseo") else args)
+        if args[:2] == ["chezmoi", "decrypt"]:
+            hosts = json.dumps({"paseoHosts": [HOSTS[0]]})
+            return mock.Mock(returncode=self.decrypt_code, stdout=hosts, stderr="no key")
         if args[0] == "chezmoi":
             return mock.Mock(returncode=self.chezmoi_code, stdout=json.dumps(self.CHEZMOI), stderr="no data")
         if args[1:3] == ["host", "ls"]:
@@ -167,13 +168,23 @@ class MainTest(unittest.TestCase):
         self.assertIn("daemon not reachable", output)
         self.assertEqual(self.registrations_changed(), [])
 
-    def test_failing_chezmoi_data_changes_nothing(self):
-        self.chezmoi_code = 1
+    def test_unreadable_chezmoi_input_changes_nothing(self):
+        failures = {
+            "chezmoi data failed": (1, 0),
+            "cannot decrypt the host list, skipping: no key": (0, 1),
+        }
+        for message, (self.chezmoi_code, self.decrypt_code) in failures.items():
+            with self.subTest(message):
+                output = self.run_main(paseo="/bin/paseo")
 
-        output = self.run_main(paseo="/bin/paseo")
+                self.assertIn(message, output)
+                self.assertEqual(self.registrations_changed(), [])
 
-        self.assertIn("chezmoi data failed", output)
-        self.assertEqual(self.registrations_changed(), [])
+    def test_host_list_comes_from_the_encrypted_file_in_the_source(self):
+        self.run_main(paseo="/bin/paseo")
+
+        encrypted = Path("/src/home") / ".encrypted" / "paseo-hosts.json.age"
+        self.assertIn(["chezmoi", "decrypt", str(encrypted)], self.calls)
 
     def test_missing_host_is_added_through_the_cli(self):
         self.run_main(paseo="/bin/paseo")

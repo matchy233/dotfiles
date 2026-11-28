@@ -5,6 +5,8 @@ from pathlib import Path
 import shutil
 import subprocess
 
+HOSTS_FILE = ".encrypted/paseo-hosts.json.age"
+
 
 def is_this_device(host, device):
     return bool(host.get("tailnet")) and (host["machine"].lower(), host["os"]) == device
@@ -64,6 +66,20 @@ def apply(actions, run):
         print(f"paseo-hosts: {action[0]} {label}: {verb}", output.strip() if code else "")
 
 
+def load_data():
+    chezmoi = capture("chezmoi", "data", "--format", "json")
+    if chezmoi.returncode != 0:
+        print("paseo-hosts: chezmoi data failed, skipping:", chezmoi.stderr.strip())
+        return None
+    data = json.loads(chezmoi.stdout)
+    encrypted = Path(data["chezmoi"]["sourceDir"]) / HOSTS_FILE
+    hosts = capture("chezmoi", "decrypt", str(encrypted))
+    if hosts.returncode != 0:
+        print("paseo-hosts: cannot decrypt the host list, skipping:", hosts.stderr.strip())
+        return None
+    return {**data, **json.loads(hosts.stdout)}
+
+
 def main():
     exe = shutil.which("paseo")
     if exe is None:
@@ -74,9 +90,8 @@ def main():
         done = capture(exe, *args)
         return done.returncode, done.stderr
 
-    chezmoi = capture("chezmoi", "data", "--format", "json")
-    if chezmoi.returncode != 0:
-        print("paseo-hosts: chezmoi data failed, skipping:", chezmoi.stderr.strip())
+    data = load_data()
+    if data is None:
         return
     listing = capture(exe, "host", "ls", "--json")
     if listing.returncode != 0:
@@ -86,7 +101,7 @@ def main():
     stored_file = Path.home() / ".paseo" / "hosts.json"
     stored = json.loads(stored_file.read_text(encoding="utf-8")) if stored_file.exists() else []
     registered = with_connections(json.loads(listing.stdout), stored)
-    apply(plan(wanted_hosts(json.loads(chezmoi.stdout)), registered), run)
+    apply(plan(wanted_hosts(data), registered), run)
 
 
 if __name__ == "__main__":

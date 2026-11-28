@@ -141,6 +141,29 @@ color in Settings, then copy the values listed by `--diff` into the script:
 python home/.chezmoiscripts/run_after_windows-appearance.py --diff
 ```
 
+## Paseo Hosts
+
+On every apply, `run_after_93-register-paseo-hosts.py` registers the remote hosts
+listed in `home/.encrypted/paseo-hosts.json.age`. The list is encrypted because
+this repository is public. Edit it with:
+
+```sh
+chezmoi edit-encrypted "$(chezmoi source-path)/.encrypted/paseo-hosts.json.age"
+```
+
+Each `paseoHosts` entry has:
+
+- `label`: the registration name. `formerLabels` lists old names whose
+  registration is renamed instead of duplicated.
+- `connection`: the Paseo SSH connection string, using aliases from
+  `~/.ssh/config`. A WSL alias is `<hostname>-wsl-<distro>`.
+- `tailnet`, `machine`, `os`: only for devices inside the tailnet. Such a device
+  registers the other tailnet entries and never itself; `machine` is its lowercase
+  hostname, and `os` tells Windows from WSL. Entries without `tailnet` are
+  registered everywhere.
+
+`privateNames` lists further names the pre-push check must keep out of commits.
+
 ## Daily Workflow
 
 Edit source state, inspect the computed destination, then commit:
