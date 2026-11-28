@@ -20,6 +20,7 @@ ACCENT_BGR = 0xFFF27DA6
 START_BGR = 0xFFC83A61
 COLORIZATION = 0xC4A67DF2
 
+ACCENT_KEY = r"Software\Microsoft\Windows\CurrentVersion\Explorer\Accent"
 SETTINGS: dict[str, dict[str, int | bytes]] = {
     r"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize": {
         "AppsUseLightTheme": 0,
@@ -28,7 +29,7 @@ SETTINGS: dict[str, dict[str, int | bytes]] = {
         # Accent on Start and the taskbar.
         "ColorPrevalence": 0,
     },
-    r"Software\Microsoft\Windows\CurrentVersion\Explorer\Accent": {
+    ACCENT_KEY: {
         "AccentPalette": PALETTE,
         "StartColorMenu": START_BGR,
         "AccentColorMenu": ACCENT_BGR,
@@ -47,6 +48,7 @@ SETTINGS: dict[str, dict[str, int | bytes]] = {
 # Tests point this at a scratch key.
 PREFIX = ""
 ATTEMPTS = 3
+ACCENT_PAUSE_SECONDS = 0.3
 SETTLE_SECONDS = 1
 
 Change = tuple[str, str, int | bytes | None, int | bytes]
@@ -98,17 +100,25 @@ def preview(changes: list[Change]) -> None:
         print("No changes needed.")
 
 
+def write_all(changes: list[Change]) -> None:
+    previous = None
+    for key, name, _, wanted in changes:
+        # Writing Explorer\Accent can make another program put the old colors back
+        # in DWM. SETTINGS lists it before DWM so that happens during this pause.
+        if previous == ACCENT_KEY != key:
+            time.sleep(ACCENT_PAUSE_SECONDS)
+        write(key, name, wanted)
+        previous = key
+
+
 def apply() -> list[Change]:
     """Write the settings until they stick and return any that did not."""
     changes = pending()
     for _ in range(ATTEMPTS):
         if not changes:
             break
-        for key, name, _, wanted in changes:
-            write(key, name, wanted)
+        write_all(changes)
         announce()
-        # Writing Explorer\Accent can make another program put the old colors back
-        # in DWM, even without the broadcast.
         time.sleep(SETTLE_SECONDS)
         changes = pending()
     return changes

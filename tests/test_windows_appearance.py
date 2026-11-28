@@ -29,9 +29,10 @@ class WindowsAppearanceTest(unittest.TestCase):
         self.script.PREFIX = self.scratch + "\\"
         self.addCleanup(self.delete_tree, self.scratch)
         self.windows = mock.MagicMock()
+        self.sleep = mock.MagicMock()
         for patcher in (
             mock.patch("ctypes.windll", self.windows),
-            mock.patch("time.sleep"),
+            mock.patch("time.sleep", self.sleep),
         ):
             patcher.start()
             self.addCleanup(patcher.stop)
@@ -112,6 +113,34 @@ class WindowsAppearanceTest(unittest.TestCase):
 
         self.assertEqual(self.value(DWM, "ColorizationColor")[0], 0xC4A67DF2)
         self.assertEqual(self.announcements, 2)
+
+    def test_old_color_put_back_after_the_accent_write_is_replaced_at_once(
+        self,
+    ) -> None:
+        reactions = []
+
+        def react_once_to_the_accent(seconds: float) -> None:
+            triggered = self.script.read(ACCENT, "AccentColorMenu") is not None
+            if triggered and not reactions:
+                reactions.append(seconds)
+                self.set_value(DWM, "ColorizationColor", 0xC40078D4)
+
+        self.sleep.side_effect = react_once_to_the_accent
+
+        self.run_script()
+
+        self.assertEqual(self.value(DWM, "ColorizationColor")[0], 0xC4A67DF2)
+        self.assertEqual(self.announcements, 1)
+        self.assertEqual(reactions, [0.3])
+
+    def test_change_without_accent_values_is_written_without_a_pause(self) -> None:
+        self.run_script()
+        self.set_value(DWM, "ColorizationColor", 0xC40078D4)
+        self.sleep.reset_mock()
+
+        self.run_script()
+
+        self.assertEqual(self.sleep.call_args_list, [mock.call(1)])
 
     def test_value_that_never_sticks_is_reported(self) -> None:
         self.windows.user32.SendMessageTimeoutW.side_effect = lambda *_: self.set_value(
